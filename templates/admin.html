@@ -1,0 +1,458 @@
+{% block content %}
+<div class="bg-gray-900 min-h-screen text-gray-300">
+  <!-- Admin Dashboard -->
+  <div class="flex flex-col min-h-screen">
+    <!-- Main Content -->
+    <div class="flex-grow p-6">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Orders Management</h2>
+        <p class="text-gray-400">View and manage all customer orders</p>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Card 1 -->
+        <div class="bg-dark-800 rounded-xl p-5 border-l-4 border-indigo-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Total Orders</p>
+              <p class="text-2xl font-bold text-white mt-1">
+                {{ vendor_total_orders }}
+              </p>
+            </div>
+            <div class="bg-indigo-500/20 p-3 rounded-lg">
+              <i class="fas fa-shopping-cart text-indigo-400 text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="flex items-center text-green-500 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span>12.5% from last month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-dark-800 rounded-xl p-5 border-l-4 border-green-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Revenue</p>
+              <p class="text-2xl font-bold text-white mt-1">
+                $ {{vendor_total_revenue }}
+              </p>
+            </div>
+            <div class="bg-green-500/20 p-3 rounded-lg">
+              <i class="fas fa-dollar-sign text-green-400 text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="flex items-center text-green-500 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span>8.2% from last month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-dark-800 rounded-xl p-5 border-l-4 border-yellow-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Pending Orders</p>
+              <p class="text-2xl font-bold text-white mt-1">128</p>
+            </div>
+            <div class="bg-yellow-500/20 p-3 rounded-lg">
+              <i class="fas fa-clock text-yellow-400 text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="flex items-center text-red-500 text-sm">
+              <i class="fas fa-arrow-down mr-1"></i>
+              <span>3.1% from last month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-dark-800 rounded-xl p-5 border-l-4 border-blue-500">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Avg. Order Value</p>
+              <p class="text-2xl font-bold text-white mt-1">$264</p>
+            </div>
+            <div class="bg-blue-500/20 p-3 rounded-lg">
+              <i class="fas fa-chart-line text-blue-400 text-xl"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="flex items-center text-green-500 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span>2.7% from last month</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-900 text-white rounded-xl shadow-lg overflow-hidden">
+        <div
+          class="px-6 py-4 border-b border-dark-700 flex flex-col md:flex-row justify-between items-start md:items-center"
+        >
+          <h3 class="text-lg font-semibold text-white">All Orders</h3>
+          <div class="mt-3 md:mt-0 flex items-center">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Search orders..."
+                class="bg-transparent border border-dark-600 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-white"
+              />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+            </div>
+          </div>
+        </div>
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-slate-600 divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  ID
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Products Name
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Date
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-right text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Details
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-right text-sm font-semibold text-white uppercase tracking-wider"
+                >
+                  Update Status
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-900 divide-y divide-gray-200">
+              {% for order in vendor_orders %}
+              <tr class="hover:bg-gray-800 transition-colors cursor-pointer">
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
+                >
+                  #P-{{ order.id }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                  {{ order.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                  {{ order.product.product_name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                  {{ order.created_at|date:"Y-m-d H:i" }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-700 text-white"
+                  >
+                    {{order.status}}
+                  </span>
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
+                  <button
+                    onclick="openModal({{ order.id }})"
+                    class="text-white bg-amber-600 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    <i class="fas fa-eye mr-1"></i> View
+                  </button>
+                </td>
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                >
+                  <button
+                    onclick="openStatusModal({{ order.id }}, '{{ order.status }}')"
+                    class="text-white bg-blue-600 px-3 py-1.5 rounded-lg transition-colors ml-2"
+                  >
+                    <i class="fas fa-edit mr-1"></i> Change Status
+                  </button>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7">No orders found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="px-6 py-4 border-t border-dark-700 flex flex-col md:flex-row justify-between items-center"
+          >
+          <p class="text-gray-400 mb-4 md:mt-20">
+            Showing 1 to 5 of 1,842 orders
+          </p>
+          <div class="flex items-center space-x-2 mt-20">
+            <button class="bg-dark-700 hover:bg-dark-600 p-2 rounded-lg">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="bg-indigo-600 text-white w-8 h-8 rounded-lg">
+              1
+            </button>
+            <button class="bg-dark-700 hover:bg-dark-600 w-8 h-8 rounded-lg">
+              2
+            </button>
+            <button class="bg-dark-700 hover:bg-dark-600 w-8 h-8 rounded-lg">
+              3
+            </button>
+            <span class="px-2">...</span>
+            <button class="bg-dark-700 hover:bg-dark-600 w-8 h-8 rounded-lg">
+              24
+            </button>
+            <button class="bg-dark-700 hover:bg-dark-600 p-2 rounded-lg">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+          </div>
+
+          <span
+            class="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+            >&#8203;</span
+          >
+
+          <div
+            id="modal-content"
+            class="inline-block align-bottom bg-transparent rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          >
+            <div class="bg-gray-950 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+                >
+                  <i class="fas fa-info-circle text-blue-600"></i>
+                </div>
+                <div
+                  class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                >
+                  <h3
+                    id="modal-title"
+                    class="text-lg leading-6 font-medium text-white"
+                  >
+                    Order Details
+                  </h3>
+                  <div class="mt-2">
+                    <div id="modal-details" class="text-sm text-white">
+                      <!-- Details will be loaded here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-transparent px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+            >
+              <button
+                id="close-modal"
+                type="button"
+                class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-6 py-1.5 bg-green-700 hover:bg-green-700 font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="statusModal"
+        class="fixed inset-0 flex items-center justify-center bg-black hidden z-50"
+        >
+        <div class="bg-gray-900 p-6 text-white rounded-lg w-96">
+          <h2 class="text-xl font-semibold mb-4">Change Order Status</h2>
+          <input type="hidden" id="statusOrderId" />
+          <label for="statusSelect" class="block mb-2">Select Status</label>
+          <select
+            id="statusSelect"
+            class="w-full p-2 border text-white bg-gray-900 border-gray-300 rounded"
+          >
+            <option value="pending">Pending</option>
+            <option value="received">Received</option>
+            <option value="processing">Processing</option>
+            <option value="transit">In Transit</option>
+            <option value="delivered">Delivered</option>
+          </select>
+          <div class="mt-4 flex justify-end space-x-2">
+            <button
+              onclick="closeStatusModal()"
+              class="px-4 py-2 bg-gray-300 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onclick="submitStatusChange()"
+              class="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple animations for interactive elements
+    document.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("mousedown", function () {
+        this.classList.add("scale-95");
+      });
+
+      button.addEventListener("mouseup", function () {
+        this.classList.remove("scale-95");
+      });
+
+      button.addEventListener("mouseleave", function () {
+        this.classList.remove("scale-95");
+      });
+    });
+  </script>
+  <script>
+    function openModal(orderId) {
+      // Show modal
+      document.getElementById("modal").classList.remove("hidden");
+
+      // Fetch order details via AJAX
+      fetch(`/orders/details/${orderId}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          const details = `
+                <p><strong>ID:</strong> #P-${data.id}</p>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Phone:</strong> ${data.phone}</p>
+                <p><strong>Address:</strong> ${data.address}, ${data.street}, ${
+            data.city
+          }, ${data.country}</p>
+                <p><strong>Product:</strong> ${data.product_name}</p>
+                <p><strong>Quantity:</strong> ${data.total_quantity}</p>
+                <p><strong>Subtotal:</strong> $${data.subtotal}</p>
+                <p><strong>Shipping Charge:</strong> $${
+                  data.shipping_charge
+                }</p>
+                <p><strong>Total Price:</strong> $${data.total_price}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+                <p><strong>Payment:</strong> ${data.payment_method}</p>
+                ${
+                  data.transaction_id
+                    ? `<p><strong>Transaction ID:</strong> ${data.transaction_id}</p>`
+                    : ""
+                }
+                ${
+                  data.emi_bank
+                    ? `<p><strong>EMI Bank:</strong> ${data.emi_bank}</p>`
+                    : ""
+                }
+                ${
+                  data.emi_duration
+                    ? `<p><strong>EMI Duration:</strong> ${data.emi_duration}</p>`
+                    : ""
+                }
+            `;
+          document.getElementById("modal-details").innerHTML = details;
+        });
+    }
+
+    // Close modal on "Close" button
+    document.getElementById("close-modal").addEventListener("click", () => {
+      document.getElementById("modal").classList.add("hidden");
+    });
+
+    // Close modal on click outside
+    window.addEventListener("click", (e) => {
+      const modal = document.getElementById("modal-content");
+      const container = document.getElementById("modal");
+      if (!modal.contains(e.target) && !e.target.closest("button")) {
+        container.classList.add("hidden");
+      }
+    });
+  </script>
+  <script>
+    function openStatusModal(orderId, currentStatus) {
+      document.getElementById("statusOrderId").value = orderId;
+      document.getElementById("statusSelect").value = currentStatus;
+      document.getElementById("statusModal").classList.remove("hidden");
+    }
+
+    function closeStatusModal() {
+      document.getElementById("statusModal").classList.add("hidden");
+    }
+
+    function submitStatusChange() {
+      const orderId = document.getElementById("statusOrderId").value;
+      const newStatus = document.getElementById("statusSelect").value;
+
+      fetch(`/orders/${orderId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"), // For CSRF protection
+        },
+        body: JSON.stringify({ status: newStatus }),
+      }).then((response) => {
+        if (response.ok) {
+          closeStatusModal();
+          location.reload(); // Or use JS to update just the row
+        } else {
+          alert("Failed to update status.");
+        }
+      });
+    }
+
+    // Get CSRF token (Django requirement)
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+</div>
+{% endblock %}

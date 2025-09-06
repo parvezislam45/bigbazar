@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Confirm EMI Payment</h2>
+<p>Bank: {{ order.emi_bank }}</p>
+<p>Duration: {{ order.emi_duration }} months</p>
+<p>Total: {{ order.total_price }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm and Place Order</button>
+</form>
+
+{% endblock  %}

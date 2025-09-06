@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-xl mb-4">Conversations</h2>
+<ul class="space-y-2">
+    {% for convo in conversations %}
+        <li class="bg-gray-100 p-2 rounded shadow">
+            <a href="{% url 'chat' convo.id %}">
+                Chat with {% for p in convo.participants.all %}{% if p != user %}{{ p.username }}{% endif %}{% endfor %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

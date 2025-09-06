@@ -1,0 +1,499 @@
+{% block content %}
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          dark: "#0a0a0a",
+          darkCard: "#121212",
+          accent: "#8b5cf6",
+          accentHover: "#7c3aed",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+  body {
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .input-field {
+    transition: all 0.3s ease;
+    background: #1a1a1a;
+  }
+
+  .input-field:focus {
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-secondary {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    background: #222;
+    transform: translateY(-2px);
+  }
+
+  .card {
+    background: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  }
+
+  .form-section {
+    background: rgba(26, 26, 26, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .glow-effect {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.2) 0%,
+      rgba(139, 92, 246, 0) 70%
+    );
+    filter: blur(40px);
+    z-index: -1;
+  }
+
+  .glow-1 {
+    top: 10%;
+    left: 10%;
+  }
+
+  .glow-2 {
+    bottom: 10%;
+    right: 10%;
+  }
+
+  .size-tag {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+  }
+
+  .remove-btn {
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .remove-btn:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+  }
+
+  .file-input::file-selector-button {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .file-input::file-selector-button:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  }
+</style>
+
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-4xl">
+    <div class="text-center mb-10">
+      <h1
+        class="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+      >
+        <i class="fas fa-box-open mr-3"></i>Product Manager
+      </h1>
+      <p class="text-gray-400">
+        Add new products to your inventory with multiple images and sizes
+      </p>
+    </div>
+
+    <div class="card rounded-2xl p-6 md:p-8">
+      <form id="productForm" class="space-y-8">
+        <!-- Product Info Section -->
+        <div class="form-section rounded-xl p-6">
+          <h2
+            class="text-xl font-semibold mb-6 pb-3 border-b border-gray-800 flex items-center"
+          >
+            <i class="fas fa-info-circle mr-2 text-accent"></i>Product
+            Information
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block mb-2 font-medium">Product Name</label>
+              <input
+                type="text"
+                name="product_name"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block mb-2 font-medium">Price ($)</label>
+              <input
+                type="number"
+                name="price"
+                step="0.01"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block mb-2 font-medium">Description</label>
+              <textarea
+                name="description"
+                rows="3"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block mb-2 font-medium">Category</label>
+              <select
+                id="categorySelect"
+                name="category"
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              >
+                <option value="" disabled selected hidden>
+                  Select Category
+                </option>
+                {% for category in links %}
+                <option value="{{ category.id }}">
+                  {{ category.category_name }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div>
+              <label class="block mb-2 font-medium">Subcategory</label>
+              <select
+                id="subcategorySelect"
+                name="subcategory"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              >
+                <option value="" disabled selected hidden>
+                  Select Subcategory
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block mb-2 font-medium">Stock Quantity</label>
+              <input
+                type="number"
+                name="stock"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              />
+            </div>
+            <div>
+              <label class="block mb-2 font-medium">Brand</label>
+              <input
+                type="text"
+                name="brand"
+                required
+                class="w-full input-field py-3 px-4 rounded-lg border border-gray-700 focus:border-accent focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Images Section -->
+        <div class="form-section rounded-xl p-6">
+          <div
+            class="flex justify-between items-center mb-6 pb-3 border-b border-gray-800"
+          >
+            <h2 class="text-xl font-semibold flex items-center">
+              <i class="fas fa-images mr-2 text-accent"></i>Product Images
+            </h2>
+            <button
+              type="button"
+              onclick="addImageField()"
+              class="btn-secondary py-2 px-4 rounded-lg flex items-center"
+            >
+              <i class="fas fa-plus mr-2"></i>Add Image
+            </button>
+          </div>
+
+          <div id="imageInputs">
+            <div class="mb-4">
+              <label class="block mb-2 font-medium">Product Image 1</label>
+              <input
+                type="file"
+                name="images"
+                accept="image/*"
+                class="w-full file-input py-2 px-4 rounded-lg border border-gray-700 bg-darkCard"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Sizes Section -->
+        <div class="form-section rounded-xl p-6">
+          <div
+            class="flex justify-between items-center mb-6 pb-3 border-b border-gray-800"
+          >
+            <h2 class="text-xl font-semibold flex items-center">
+              <i class="fas fa-ruler-combined mr-2 text-accent"></i>Available
+              Sizes
+            </h2>
+            <button
+              type="button"
+              onclick="addSizeField()"
+              class="btn-secondary py-2 px-4 rounded-lg flex items-center"
+            >
+              <i class="fas fa-plus mr-2"></i>Add Size
+            </button>
+          </div>
+
+          <div id="sizeInputs" class="flex flex-wrap gap-3">
+            <div class="relative">
+              <input
+                type="text"
+                name="sizes"
+                placeholder="Size (e.g. S, M, L)"
+                class="size-tag py-2 pl-4 pr-8 rounded-lg"
+              />
+              <span
+                class="remove-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500"
+              >
+                <i class="fas fa-times"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center pt-4">
+          <button
+            type="submit"
+            class="btn-primary py-3 px-8 rounded-lg font-semibold text-lg flex items-center"
+          >
+            <i class="fas fa-cloud-upload-alt mr-3"></i> Add Product
+          </button>
+        </div>
+        <div
+          id="message"
+          class="text-center py-3 px-4 rounded-lg bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 hidden"
+        ></div>
+      </form>
+    </div>
+
+    <div class="text-center mt-8 text-gray-50 text-sm">
+      <p>Big Bazar Islamic Commerce Ltd.</p>
+    </div>
+  </div>
+</div>
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie("csrftoken");
+  function addImageField() {
+    const container = document.getElementById("imageInputs");
+    const count = container.children.length + 1;
+
+    const div = document.createElement("div");
+    div.className = "mb-4";
+    div.innerHTML = `
+            <div class="flex items-center justify-between">
+                <label class="block mb-2 font-medium">Product Image ${count}</label>
+                <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-red-500">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <input type="file" name="images" accept="image/*" class="w-full file-input py-2 px-4 rounded-lg border border-gray-700 bg-darkCard">
+        `;
+
+    container.appendChild(div);
+  }
+
+  // -------------------------
+  // Add Dynamic Size Fields
+  // -------------------------
+  function addSizeField() {
+    const container = document.getElementById("sizeInputs");
+    const div = document.createElement("div");
+    div.className = "relative";
+    div.innerHTML = `
+            <input type="text" name="sizes" placeholder="Size (e.g. S, M, L)" class="size-tag py-2 pl-4 pr-8 rounded-lg">
+            <span onclick="this.parentElement.remove()" class="remove-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="fas fa-times"></i>
+            </span>
+        `;
+
+    container.appendChild(div);
+  }
+
+  // -------------------------
+  // Remove Size Fields
+  // -------------------------
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".remove-btn")) {
+      e.target.closest(".relative").remove();
+    }
+  });
+
+  // -------------------------
+  // Fetch Subcategories Dynamically
+  // -------------------------
+  const categorySelect = document.getElementById("categorySelect");
+  const subcategorySelect = document.getElementById("subcategorySelect");
+
+  categorySelect.addEventListener("change", async function () {
+    const categoryId = this.value;
+    subcategorySelect.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+
+    try {
+      const response = await fetch(`/subcategories/by-category/${categoryId}/`);
+      const data = await response.json();
+
+      if (data.length === 0) {
+        subcategorySelect.innerHTML = `<option value="" disabled selected>No subcategories available</option>`;
+        return;
+      }
+
+      subcategorySelect.innerHTML = `<option value="" disabled selected>Select Subcategory</option>`;
+      data.forEach((sub) => {
+        const option = document.createElement("option");
+        option.value = sub.id;
+        option.textContent = sub.subcategory_name; // Use the correct field name
+        subcategorySelect.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      subcategorySelect.innerHTML = `<option value="" disabled selected>Error loading subcategories</option>`;
+    }
+  });
+
+  // -------------------------
+  // Handle Product Form Submission
+  // -------------------------
+  document
+    .getElementById("productForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const messageEl = document.getElementById("message");
+      messageEl.textContent = "Adding product...";
+      messageEl.classList.remove("hidden", "bg-red-900/50");
+      messageEl.classList.add("bg-purple-900/50");
+
+      const form = e.target;
+      const formData = new FormData();
+
+      // Append all normal fields
+      new FormData(form).forEach((value, key) => {
+        if (key !== "images" && key !== "sizes") {
+          formData.append(key, value);
+        }
+      });
+
+      // Append dynamic image fields
+      document.querySelectorAll('input[name="images"]').forEach((input) => {
+        if (input.files.length > 0) {
+          formData.append("images", input.files[0]); // ✅ only one per input
+        }
+      });
+
+      // Append dynamic size fields
+      document.querySelectorAll('input[name="sizes"]').forEach((input) => {
+        if (input.value.trim()) {
+          formData.append("sizes", input.value.trim());
+        }
+      });
+
+      try {
+        const response = await fetch("/add-product/", {
+          method: "POST",
+          body: formData,
+          headers: { "X-CSRFToken": csrftoken },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          messageEl.textContent = data.message || "Product added successfully!";
+          messageEl.classList.remove("bg-red-900/50");
+          messageEl.classList.add("bg-green-900/50");
+          form.reset();
+
+          // Reset image fields
+          document.getElementById("imageInputs").innerHTML = `
+          <div class="mb-4">
+            <label class="block mb-2 font-medium">Product Image 1</label>
+            <input type="file" name="images" accept="image/*" class="w-full file-input py-2 px-4 rounded-lg border border-gray-700 bg-darkCard">
+          </div>
+        `;
+
+          // Reset size fields
+          document.getElementById("sizeInputs").innerHTML = `
+          <div class="relative">
+            <input type="text" name="sizes" placeholder="Size (e.g. S, M, L)" class="size-tag py-2 pl-4 pr-8 rounded-lg">
+            <span class="remove-btn absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500">
+              <i class="fas fa-times"></i>
+            </span>
+          </div>
+        `;
+
+          // Reset subcategory
+          subcategorySelect.innerHTML = `<option value="" disabled selected>Select Subcategory</option>`;
+        } else {
+          messageEl.textContent =
+            data.message || "Error occurred. Please check your inputs.";
+          messageEl.classList.remove("bg-green-900/50", "bg-purple-900/50");
+          messageEl.classList.add("bg-red-900/50");
+        }
+      } catch (error) {
+        messageEl.textContent = "Network error. Please try again.";
+        messageEl.classList.remove("bg-green-900/50", "bg-purple-900/50");
+        messageEl.classList.add("bg-red-900/50");
+      }
+    });
+</script>
+
+{% endblock %}

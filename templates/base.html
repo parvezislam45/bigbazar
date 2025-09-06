@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0e1d 0%, #1a1c30 100%);
+            color: #e2e8f0;
+            font-family: 'Exo 2', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .futuristic-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, rgba(16, 18, 37, 0.95) 0%, rgba(28, 30, 64, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(101, 119, 255, 0.2);
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 25px rgba(101, 119, 255, 0.3);
+        }
+        
+        .glow-effect-hover:hover {
+            box-shadow: 0 0 35px rgba(101, 119, 255, 0.5);
+        }
+        
+        .holographic-card {
+            background: rgba(20, 22, 48, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(101, 119, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .holographic-card:hover {
+            transform: translateY(-10px);
+            border: 1px solid rgba(101, 119, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(101, 119, 255, 0.2);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px rgba(101, 119, 255, 0.7);
+        }
+        
+        .neon-accent {
+            color: #6577ff;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #6577ff, #c56cf0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .search-bar {
+            background: rgba(16, 18, 37, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(101, 119, 255, 0.3);
+        }
+        
+        .search-bar:focus {
+            box-shadow: 0 0 0 3px rgba(101, 119, 255, 0.3);
+            border: 1px solid rgba(101, 119, 255, 0.5);
+        }
+        
+        .pulse {
+            animation: pulseAnimation 2s infinite;
+        }
+        
+        @keyframes pulseAnimation {
+            0% { box-shadow: 0 0 0 0 rgba(101, 119, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(101, 119, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(101, 119, 255, 0); }
+        }
+        
+        .floating {
+            animation: floatingAnimation 6s ease-in-out infinite;
+        }
+        
+        @keyframes floatingAnimation {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(101, 119, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(101, 119, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .category-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.2);
+            color: #6577ff;
+        }
+        
+        .vendor-badge {
+            background: linear-gradient(90deg, #6577ff, #c56cf0);
+            color: white;
+            border-radius: 20px;
+        }
+        
+        .featured-vendor {
+            background: linear-gradient(135deg, rgba(20, 22, 48, 0.7) 0%, rgba(28, 30, 64, 0.7) 100%);
+            border: 1px solid rgba(101, 119, 255, 0.3);
+            border-radius: 20px;
+        }
+        
+        .featured-vendor:hover {
+            border: 1px solid rgba(101, 119, 255, 0.7);
+        }
+        
+        .holographic-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(101, 119, 255, 0.5), transparent);
+        }
+        
+        .grid-glow {
+            position: relative;
+        }
+        
+        .grid-glow::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #6577ff, #c56cf0, #ff9f93, #6577ff);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: gradientAnimation 15s ease infinite;
+            filter: blur(20px);
+            opacity: 0.3;
+        }
+        
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4A5568 #252533;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: #252533;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4A5568;
+            border-radius: 10px;
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(145deg, #1A1A24, #252533);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .price-tag {
+            background: linear-gradient(90deg, #8B5CF6, #6366F1);
+        }
+        
+        .filter-option:hover {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), transparent);
+            border-left: 3px solid #8B5CF6;
+        }
+        
+        .badge {
+            top: -8px;
+            right: -8px;
+        }
+        
+        .discount-tag {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+        }
+        
+        .skeleton {
+            animation: skeleton-loading 1.5s linear infinite alternate;
+        }
+        
+        @keyframes skeleton-loading {
+            0% {
+                background-color: #1A1A24;
+            }
+            100% {
+                background-color: #252533;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+  </head>
+    <title>Big Bazar Islami Commerce</title>
+</head>
+<body class="font-poppins bg-light">
+  <div>
+    {% include "nav.html" %}
+    {% block content %}
+    
+    {% endblock  %}
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+  <script>
+        $(document).ready(function() {
+        $("#search").autocomplete({
+            source: "{% url 'ajax_search_products' %}",
+            minLength: 1,
+            select: function(event, ui) {
+                // Set the selected product name to input
+                $("#search").val(ui.item.value);
+
+                // Submit the form
+                $("#search-form").submit();
+
+                return false;  // prevent default behavior
+            }
+        });
+    });
+ </script>
+ <script>
+  let jsonData = [];
+
+  window.addEventListener("DOMContentLoaded", () => {
+    fetch("https://administration-all-area.onrender.com/full")
+      .then((res) => res.json())
+      .then((data) => {
+        jsonData = data.districts ? [data] : data;
+        ["present"].forEach((prefix) => {
+          if (document.getElementById(`${prefix}-division`)) {
+            populateDropdown(jsonData, `${prefix}-division`, "division");
+            setupAddress(prefix);
+          }
+        });
+      });
+  });
+
+  function setupAddress(prefix) {
+    const divisionEl = document.getElementById(`${prefix}-division`);
+    const districtEl = document.getElementById(`${prefix}-district`);
+    const upazilaEl = document.getElementById(`${prefix}-upazila`);
+    const unionEl = document.getElementById(`${prefix}-union`);
+
+    if (divisionEl) {
+      divisionEl.addEventListener("change", function () {
+        const division = this.value;
+        resetSelects([`${prefix}-district`, `${prefix}-upazila`, `${prefix}-union`]);
+        hideAddressDynamic(prefix);
+
+        const divisionData = jsonData.find((d) => d.division === division);
+        if (divisionData?.districts) {
+          populateDropdown(divisionData.districts, `${prefix}-district`, "name");
+        }
+      });
+    }
+
+    if (districtEl) {
+      districtEl.addEventListener("change", function () {
+        const division = divisionEl.value;
+        const district = this.value;
+        resetSelects([`${prefix}-upazila`, `${prefix}-union`]);
+        hideAddressDynamic(prefix);
+
+        const divisionData = jsonData.find((d) => d.division === division);
+        const districtData = divisionData?.districts?.find((d) => d.name === district);
+        if (districtData?.upazilas) {
+          populateDropdown(districtData.upazilas, `${prefix}-upazila`, "name");
+        }
+      });
+    }
+
+    if (upazilaEl) {
+      upazilaEl.addEventListener("change", function () {
+        const division = divisionEl.value;
+        const district = districtEl.value;
+        const upazila = this.value;
+        resetSelects([`${prefix}-union`]);
+        hideAddressDynamic(prefix);
+
+        const divisionData = jsonData.find((d) => d.division === division);
+        const districtData = divisionData?.districts?.find((d) => d.name === district);
+        const upazilaData = districtData?.upazilas?.find((u) => u.name === upazila);
+
+        if (upazilaData?.unions) {
+          populateDropdown(
+            upazilaData.unions.map((u) => ({ name: u })),
+            `${prefix}-union`,
+            "name"
+          );
+
+          const unionContainer = document.getElementById(`${prefix}-union-container`);
+          if (unionContainer) unionContainer.classList.remove("hidden");
+        }
+      });
+    }
+  }
+
+  function populateDropdown(items, selectId, textProp, valueProp = null) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Select</option>';
+
+    if (items?.length) {
+      items.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = valueProp ? item[valueProp] : item[textProp];
+        option.textContent = item[textProp];
+        select.appendChild(option);
+      });
+
+      select.disabled = false;
+    }
+  }
+
+  function resetSelects(ids) {
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      if (el.tagName === "SELECT") {
+        el.innerHTML = '<option value="">Select</option>';
+        el.disabled = true;
+      } else {
+        el.value = "";
+      }
+    });
+  }
+
+  function hideAddressDynamic(prefix) {
+    const elementsToHide = [`${prefix}-union-container`];
+    elementsToHide.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("hidden");
+    });
+  }
+</script>
+
+
+</body>
+</html>

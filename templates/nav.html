@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Big Bazar Islami Commerce</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .header-gradient {
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+      }
+
+      .search-bar {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .search-bar:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 15px rgba(66, 153, 225, 0.5);
+      }
+
+      .glow-effect {
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.7);
+      }
+
+      .neon-accent {
+        color: #a855f7;
+        text-shadow: 0 0 5px #a855f7, 0 0 10px #a855f7;
+      }
+
+      .futuristic-font {
+        font-family: "Arial", sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+      }
+
+      #cart-drawer {
+        box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+      }
+
+      #overlay {
+        transition: opacity 0.3s ease;
+      }
+
+      .mobile-menu {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      @media (max-width: 768px) {
+        .search-bar {
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen">
+    <nav class="header-gradient sticky top-0 z-50 py-4 px-6 sm:px-12">
+      <div class="flex justify-between items-center">
+        <!-- Logo and Mobile Menu Button -->
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-3 glow-effect"
+          >
+            <i class="fas fa-cube text-white"></i>
+          </div>
+          <h1 class="futuristic-font text-md font-bold">
+            Big Bazar<span class="neon-accent mx-1">Islami Commerce</span>
+          </h1>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <div class="hidden lg:flex items-center space-x-10 mx-10">
+          <a
+            href="{% url 'home' %}"
+            class="text-gray-300 hover:text-white transition"
+            >Home</a
+          >
+
+          <a
+            href="{% url 'store' %}"
+            class="text-gray-300 hover:text-white transition"
+            >Shop</a
+          >
+        </div>
+
+        <!-- Search Bar -->
+        <form
+          method="GET"
+          action="{% url 'store' %}"
+          id="search-form"
+          class="flex-1 mx-8 hidden md:block"
+        >
+          <div class="relative">
+            <div
+              class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+            >
+              <i class="fas fa-search"></i>
+            </div>
+            <input
+              name="keyword"
+              id="search"
+              type="text"
+              class="search-bar w-80 pl-12 pr-4 py-2 rounded-xl focus:outline-none text-white"
+              placeholder="Search for products"
+            />
+            <button
+              type="submit"
+              class="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+
+        <!-- Right Icons -->
+        <div class="flex items-center space-x-6">
+          <!-- Mobile Menu Button -->
+          <button
+            id="mobile-menu-button"
+            class="lg:hidden text-gray-400 hover:text-white"
+          >
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+
+          <button
+            class="text-gray-400 hover:text-white transition hidden lg:block"
+          >
+            <i class="fas fa-heart text-xl"></i>
+          </button>
+
+          <button
+            id="cart-btn"
+            class="text-gray-400 hover:text-white transition relative"
+          >
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span
+              id="cart-count"
+              class="absolute -top-2 -right-2 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+              >0</span
+            >
+          </button>
+
+          <!-- User dropdown -->
+          {% if request.user.is_authenticated and user_role != 'user' %}
+          <div
+            class="relative"
+            x-data="{ open: false }"
+            @click.outside="open = false"
+          >
+            <button
+              @click="open = !open"
+              class="flex items-center space-x-2 text-gray-700 hover:text-white transition"
+            >
+              <div
+                class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white"
+              >
+                <i class="fas fa-user"></i>
+              </div>
+            </button>
+            <div
+              x-show="open"
+              x-transition
+              class="absolute right-0 mt-2 w-64 bg-gray-900 rounded-lg shadow-lg p-4 z-50"
+            >
+              <h2 class="text-sm font-bold mb-2 text-white">User Info</h2>
+              <p class="text-sm mb-1">
+                <strong>Name:</strong> {{ request.user.username }}
+              </p>
+              <p class="text-sm mb-3">
+                <strong>Email:</strong> {{ request.user.email }}
+              </p>
+              <p class="text-sm mb-3">
+                <strong>Role:</strong> {{ request.user.role }}
+              </p>
+              <a
+                class="bg-green-500 text-white text-sm px-3 py-1.5 rounded hover:bg-green-600 w-full"
+                href="{% url 'staff_dashboard' %}"
+                >Go Dashboard</a
+              >
+              <a
+                class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 w-full"
+                href="{% url 'logout' %}"
+                >Logout</a
+              >
+            </div>
+          </div>
+          {% else %}
+          <!-- Show login link -->
+          <a href="{% url 'login' %}">Login</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="mobile-menu lg:hidden mt-4 bg-gray-800 rounded-lg p-4 hidden transform -translate-y-2 opacity-0"
+      >
+        <div class="mb-4">
+          <form class="relative">
+            <div
+              class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+            >
+              <i class="fas fa-search"></i>
+            </div>
+            <input
+              type="text"
+              class="search-bar w-full pl-12 pr-4 py-2 rounded-xl focus:outline-none text-white"
+              placeholder="Search for products"
+            />
+          </form>
+        </div>
+
+        <a
+          href="{% url 'home' %}"
+          class="block py-3 px-4 hover:bg-gray-700 rounded-lg transition"
+        >
+          <i class="fas fa-home mr-3"></i> Home
+        </a>
+
+        <a
+          href="{% url 'store' %}"
+          class="block py-3 px-4 hover:bg-gray-700 rounded-lg transition"
+        >
+          <i class="fas fa-shopping-bag mr-3"></i> Shop
+        </a>
+
+        <a
+          href="#"
+          class="block py-3 px-4 hover:bg-gray-700 rounded-lg transition"
+        >
+          <i class="fas fa-heart mr-3"></i> Wishlist
+        </a>
+      </div>
+    </nav>
+
+    <!-- Cart Drawer -->
+    <div
+      id="cart-drawer"
+      class="fixed top-0 right-0 h-full w-full sm:w-96 bg-gray-900 shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50"
+    >
+      <!-- Drawer Header -->
+      <div
+        class="flex items-center justify-between px-5 py-4 border-b border-gray-700"
+      >
+        <h2 class="text-xl font-bold text-blue-400">My Cart</h2>
+        <button
+          id="close-cart-btn"
+          class="text-gray-400 hover:text-white transition text-2xl"
+        >
+          &times;
+        </button>
+      </div>
+
+      <!-- Cart Items -->
+      <div id="cart-items" class="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+        <p class="text-gray-400 text-center">Your cart is empty.</p>
+      </div>
+
+      <!-- Cart Footer -->
+      <div
+        class="absolute bottom-0 left-0 right-0 border-t border-gray-700 bg-gray-900 px-5 py-4"
+      >
+        <div class="flex justify-between mb-4">
+          <span class="text-gray-300 font-semibold">Total:</span>
+          <span id="cart-total" class="text-blue-400 font-bold">₹0.00</span>
+        </div>
+        <button
+          id="checkout-btn"
+          class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition"
+        >
+          <i class="fas fa-bolt mr-2"></i>
+          Checkout
+        </button>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div
+      id="overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"
+    ></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cartBtn = document.getElementById("cart-btn");
+        const cartDrawer = document.getElementById("cart-drawer");
+        const closeCartBtn = document.getElementById("close-cart-btn");
+        const overlay = document.getElementById("overlay");
+        const cartItemsContainer = document.getElementById("cart-items");
+        const cartCount = document.getElementById("cart-count");
+        const cartTotal = document.getElementById("cart-total");
+
+        // Open Cart Drawer
+        cartBtn.addEventListener("click", () => {
+          cartDrawer.classList.remove("translate-x-full");
+          overlay.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+          fetchCart(); // Fetch real cart items
+        });
+
+        // Close Cart Drawer
+        function closeDrawer() {
+          cartDrawer.classList.add("translate-x-full");
+          overlay.classList.add("hidden");
+          document.body.style.overflow = "auto";
+        }
+        closeCartBtn.addEventListener("click", closeDrawer);
+        overlay.addEventListener("click", closeDrawer);
+
+        // Fetch cart items from backend
+        async function fetchCart() {
+          try {
+            const response = await fetch("/cart/", {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "same-origin", // send CSRF cookies
+            });
+
+            if (!response.ok) {
+              cartItemsContainer.innerHTML = `<p class="text-gray-400 text-center">Please login to see your cart.</p>`;
+              cartTotal.textContent = "₹0.00";
+              cartCount.textContent = "0";
+              return;
+            }
+
+            const data = await response.json();
+
+            cartItemsContainer.innerHTML = "";
+            let total = 0;
+
+            if (data.length === 0) {
+              cartItemsContainer.innerHTML = `<p class="text-gray-400 text-center">Your cart is empty.</p>`;
+              cartTotal.textContent = "₹0.00";
+              cartCount.textContent = "0";
+              return;
+            }
+
+            data.forEach((item) => {
+              const price = item.discounted_price || item.price;
+              const itemTotal = price * item.quantity;
+              total += itemTotal;
+
+              cartItemsContainer.innerHTML += `
+          <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg" data-id="${
+            item.id
+          }">
+            <div class="flex items-center gap-3">
+              <img src="${
+                item.product_image || "/static/default-product.png"
+              }" alt="${item.product_name}" class="w-16 h-16 rounded-lg" />
+              <div>
+                <h4 class="text-white font-semibold">${item.product_name}</h4>
+                <p class="text-blue-400 font-bold">₹${price}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateQuantity(${
+                item.id
+              }, 'decrease')" class="bg-gray-600 text-white px-2 rounded">-</button>
+              <span class="text-white font-semibold" id="qty-${item.id}">${
+                item.quantity
+              }</span>
+              <button onclick="updateQuantity(${
+                item.id
+              }, 'increase')" class="bg-gray-600 text-white px-2 rounded">+</button>
+              <button onclick="deleteItem(${
+                item.id
+              })" class="bg-red-600 text-white px-3 rounded">×</button>
+            </div>
+          </div>
+        `;
+            });
+
+            cartTotal.textContent = `₹${total.toFixed(2)}`;
+            cartCount.textContent = data.length;
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        // Update quantity (+/-)
+        window.updateQuantity = async function (id, action) {
+          try {
+            await fetch(`/cart/update/${id}/`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+              },
+              body: JSON.stringify({ action }),
+              credentials: "same-origin",
+            });
+            fetchCart();
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        // Delete cart item
+        window.deleteItem = async function (id) {
+          try {
+            await fetch(`/cart/${id}/`, {
+              method: "DELETE",
+              headers: { "X-CSRFToken": getCSRFToken() },
+              credentials: "same-origin",
+            });
+            fetchCart();
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        document
+          .getElementById("checkout-btn")
+          .addEventListener("click", async () => {
+            try {
+              const res = await fetch("/cart/");
+              const data = await res.json();
+
+              if (data.length === 0) {
+                alert("Your cart is empty!");
+                return;
+              }
+
+              // Send all cart items to session via POST
+              const response = await fetch("/order/from-cart/", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": getCSRFToken(),
+                },
+                body: JSON.stringify({ items: data }),
+              });
+
+              if (response.ok) {
+                window.location.href = "/order/from-cart/";
+              } else {
+                alert("Something went wrong! Please try again.");
+              }
+            } catch (err) {
+              console.error(err);
+              alert("Error while processing checkout!");
+            }
+          });
+
+        function getCSRFToken() {
+          const name = "csrftoken=";
+          const decodedCookie = decodeURIComponent(document.cookie);
+          const cookies = decodedCookie.split(";");
+          for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name)) {
+              return cookie.substring(name.length, cookie.length);
+            }
+          }
+          return "";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+{% block content %}
+<div class="bg-gray-900">
+  <div class=" bg-gray-900 p-6 rounded shadow">
+    <h1 class="text-2xl font-semibold mb-4 text-white">Received Orders</h1>
+    <table class="min-w-full bg-slate-600 divide-y divide-gray-200">
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            ID
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Name
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Products Name
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Date
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Status
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-right text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Details
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-900 divide-y divide-gray-200">
+        {% for order in orders %}
+        <tr class="hover:bg-gray-800 transition-colors cursor-pointer">
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
+          >
+            #P-{{ order.id }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            {{ order.name }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            {{ order.product.product_name }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            {{ order.created_at |date:"Y-m-d h:i A" }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-700 text-white"
+            >
+              {{order.status}}
+            </span>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+          >
+            <button
+              onclick="openModal({{ order.id }})"
+              class="text-white bg-amber-600 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              <i class="fas fa-eye mr-1"></i> View
+            </button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-4">
+            No orders found for selected status.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div id="modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div
+      class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+    >
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+      </div>
+
+      <span
+        class="hidden sm:inline-block sm:align-middle sm:h-screen"
+        aria-hidden="true"
+        >&#8203;</span
+      >
+
+      <div
+        id="modal-content"
+        class="inline-block align-bottom bg-transparent rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      >
+        <div class="bg-gray-950 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+            >
+              <i class="fas fa-info-circle text-blue-600"></i>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <h3
+                id="modal-title"
+                class="text-lg leading-6 font-medium text-white"
+              >
+                Order Details
+              </h3>
+              <div class="mt-2">
+                <div id="modal-details" class="text-sm text-white">
+                  <!-- Details will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-transparent px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+        >
+          <button
+            id="close-modal"
+            type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-6 py-1.5 bg-green-700 hover:bg-green-700 font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Simple animations for interactive elements
+  document.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("mousedown", function () {
+      this.classList.add("scale-95");
+    });
+
+    button.addEventListener("mouseup", function () {
+      this.classList.remove("scale-95");
+    });
+
+    button.addEventListener("mouseleave", function () {
+      this.classList.remove("scale-95");
+    });
+  });
+</script>
+<script>
+  function openModal(orderId) {
+    // Show modal
+    document.getElementById("modal").classList.remove("hidden");
+
+    // Fetch order details via AJAX
+    fetch(`/orders/details/${orderId}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        const details = `
+                <p><strong>ID:</strong> #P-${data.id}</p>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Phone:</strong> ${data.phone}</p>
+                <p><strong>Address:</strong> ${data.address}, ${data.street}, ${
+          data.city
+        }, ${data.country}</p>
+                <p><strong>Product:</strong> ${data.product_name}</p>
+                <p><strong>Quantity:</strong> ${data.total_quantity}</p>
+                <p><strong>Subtotal:</strong> $${data.subtotal}</p>
+                <p><strong>Shipping Charge:</strong> $${
+                  data.shipping_charge
+                }</p>
+                <p><strong>Total Price:</strong> $${data.total_price}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+                <p><strong>Payment:</strong> ${data.payment_method}</p>
+                ${
+                  data.transaction_id
+                    ? `<p><strong>Transaction ID:</strong> ${data.transaction_id}</p>`
+                    : ""
+                }
+                ${
+                  data.emi_bank
+                    ? `<p><strong>EMI Bank:</strong> ${data.emi_bank}</p>`
+                    : ""
+                }
+                ${
+                  data.emi_duration
+                    ? `<p><strong>EMI Duration:</strong> ${data.emi_duration}</p>`
+                    : ""
+                }
+            `;
+        document.getElementById("modal-details").innerHTML = details;
+      });
+  }
+
+  // Close modal on "Close" button
+  document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("modal").classList.add("hidden");
+  });
+
+  // Close modal on click outside
+  window.addEventListener("click", (e) => {
+    const modal = document.getElementById("modal-content");
+    const container = document.getElementById("modal");
+    if (!modal.contains(e.target) && !e.target.closest("button")) {
+      container.classList.add("hidden");
+    }
+  });
+</script>
+{% endblock %}

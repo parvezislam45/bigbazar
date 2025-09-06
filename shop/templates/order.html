@@ -1,0 +1,367 @@
+<!-- templates/order.html -->
+{% extends "base.html" %} {% block content %}
+<div class="min-h-screen flex items-center justify-center p-4 text-gray-200">
+  <div class="max-w-6xl w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Product Details Section -->
+      <div class="bg-dark-800 rounded-2xl p-6 card">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-shrink-0">
+            <div class="bg-dark-700 rounded-xl p-4">
+              <img
+                src="{{ image_url }}"
+                alt="{{product_name}}"
+                class="w-64 h-64 object-contain rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-bold mb-2">{{product_name}}</h2>
+            <h2 class="text-md font-normal mb-2">{{category}}</h2>
+            <div class="mb-6">
+              <div class="flex justify-between py-3 border-b border-dark-600">
+                <span class="text-gray-400">Price:</span>
+                <span class="font-bold">৳ {{subtotal}}</span>
+              </div>
+              <div class="flex justify-between py-3 border-b border-dark-600">
+                <span class="text-gray-400">Quantity</span>
+                <span class="font-bold">{{quantity}}</span>
+              </div>
+              <div class="flex justify-between py-3 border-b border-dark-600">
+                <span class="text-gray-400">Shipping:</span>
+                <span class="font-bold">৳ {{shipping_charge}}</span>
+              </div>
+              <div class="flex justify-between py-3 border-b border-dark-600">
+                <span class="text-gray-400">VAT (10%):</span>
+                <span class="font-bold">৳ 00.00</span>
+              </div>
+
+              <div class="flex justify-between py-3 border-b border-dark-600">
+                <span class="text-gray-400">Subtotal:</span>
+                <span class="font-bold">৳ {{total_price}}</span>
+              </div>
+              <div class="flex justify-between py-3">
+                <span class="text-gray-400 text-lg">Total:</span>
+                <span class="font-bold text-xl text-purple-400"
+                  >৳ {{total_price}}</span
+                >
+              </div>
+            </div>
+
+            <div class="flex items-center text-sm text-gray-400 mb-2">
+              <i class="fas fa-shield-alt text-purple-400 mr-2"></i>
+              <span>Secure payment • 2-year warranty • 30-day money back</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Form Section -->
+      <div class="bg-dark-800 rounded-2xl p-6 card">
+        <h2 class="text-2xl font-bold mb-6 text-center">Complete Your Order</h2>
+
+        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% csrf_token %}
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <i class="fas fa-user text-purple-400 mr-2"></i>
+              Personal Information
+            </h3>
+          </div>
+
+          <div>
+            <label class="block text-gray-400 mb-2">Full Name</label>
+            <input
+              type="text"
+              name="name"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-400 mb-2">Phone</label>
+            <input
+              type="text"
+              name="phone"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div class="md:col-span-2 mt-4">
+            <h3 class="text-lg font-semibold mb-3 flex items-center">
+              <i class="fas fa-truck text-purple-400 mr-2"></i>
+              Shipping Address
+            </h3>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-gray-400 mb-2">Address</label>
+            <input
+              type="text"
+              name="address"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-400 mb-2">City</label>
+            <input
+              type="text"
+              name="city"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-gray-400 mb-2">Street</label>
+            <input
+              type="text"
+              name="street"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-400 mb-2">Country</label>
+            <input
+              type="text"
+              name="country"
+              class="w-full bg-transparent text-white border border-dark-600 rounded-lg py-2 input-field focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          {% comment %} ------------------ Products Info
+          ------------------------ {% endcomment %}
+          <!-- Hidden Fields -->
+          <input type="hidden" name="product_name" value="{{ product_name }}" />
+          <input type="hidden" name="image_url" value="{{ image_url }}" />
+          <input type="hidden" name="total_quantity" value="{{ quantity }}" />
+          <input type="hidden" value="{{ subtotal }}" />
+          <input type="hidden" value="{{ shipping_charge }}" />
+          <input type="hidden" value="{{ total_price }}" />
+
+          <div class="md:col-span-2 mt-6">
+  <h3 class="text-lg font-semibold mb-4 flex items-center">
+    <i class="fas fa-credit-card text-purple-400 mr-2"></i>
+    <span class="text-md">Payment Method</span>
+  </h3>
+
+  <!-- Hidden Fields -->
+  <input type="hidden" name="payment_method" id="payment_method" value="cod" />
+  <input type="hidden" name="transaction_id" id="transaction_id" />
+  <input type="hidden" name="emi_bank" id="emi_bank" />
+  <input type="hidden" name="emi_duration" id="emi_duration" />
+
+  <!-- Payment Options -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- Cash on Delivery -->
+    <div
+      class="payment-option p-4 rounded-xl bg-dark-700 cursor-pointer"
+      onclick="selectPayment('cod', event)"
+    >
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-purple-900 flex items-center justify-center mb-3">
+          <i class="fas fa-money-bill-wave text-xl text-purple-400"></i>
+        </div>
+        <span class="font-medium">Cash on Delivery</span>
+      </div>
+    </div>
+
+    <!-- Online Payment -->
+    <div
+      class="payment-option p-4 rounded-xl bg-dark-700 cursor-pointer"
+      onclick="selectPayment('online', event)"
+    >
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-purple-900 flex items-center justify-center mb-3">
+          <i class="fas fa-globe text-xl text-purple-400"></i>
+        </div>
+        <span class="font-medium">Online Payment</span>
+      </div>
+    </div>
+
+    <!-- EMI Payment -->
+    <div
+      class="payment-option p-4 rounded-xl bg-dark-700 cursor-pointer"
+      onclick="selectPayment('emi', event)"
+    >
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-purple-900 flex items-center justify-center mb-3">
+          <i class="fas fa-calendar-alt text-xl text-purple-400"></i>
+        </div>
+        <span class="font-medium">EMI Payment</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Details Section -->
+  <div id="payment-details" class="mt-6 p-4 rounded-xl bg-dark-700 hidden">
+    <!-- COD Details -->
+    <div id="cod-details" class="payment-detail hidden">
+      <label class="block text-gray-300 mb-2">Transaction ID (Required)</label>
+      <input
+        type="text"
+        id="cod-transaction"
+        placeholder="e.g. TRX123456"
+        class="w-full bg-dark-800 border border-dark-600 rounded-lg py-3 px-4 input-field focus:outline-none focus:border-purple-500"
+        oninput="document.getElementById('transaction_id').value = this.value"
+      />
+      <p class="text-gray-400 mt-2 text-sm text-center">
+        You must provide a transaction ID for COD.
+      </p>
+    </div>
+
+    <!-- Online Details -->
+    <div id="online-details" class="payment-detail hidden">
+      <p class="text-gray-300 mb-4">
+        You will be redirected to the SSLCommerz gateway after submitting the order.
+      </p>
+      <p class="text-sm text-gray-400">Secure redirection will occur after placing the order.</p>
+    </div>
+
+    <!-- EMI Details -->
+    <div id="emi-details" class="payment-detail hidden">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <label class="block text-gray-400 mb-2">Select Bank</label>
+          <select
+            id="emi-bank-select"
+            class="w-full bg-dark-800 border border-dark-600 rounded-lg py-3 px-4 input-field focus:outline-none focus:border-purple-500"
+            onchange="document.getElementById('emi_bank').value = this.value"
+          >
+            <option value="">-- Select Bank --</option>
+            <option value="abc">ABC Bank (6 months)</option>
+            <option value="xyz">XYZ Bank (9 months)</option>
+            <option value="premium">Premium Bank (12 months)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-2">EMI Duration</label>
+          <div class="flex items-center space-x-3">
+            <label><input type="radio" name="emi_duration_option" value="3" class="mr-1" onclick="setEmiDuration(this)" /> 3 mo</label>
+            <label><input type="radio" name="emi_duration_option" value="6" class="mr-1" onclick="setEmiDuration(this)" checked /> 6 mo</label>
+            <label><input type="radio" name="emi_duration_option" value="9" class="mr-1" onclick="setEmiDuration(this)" /> 9 mo</label>
+            <label><input type="radio" name="emi_duration_option" value="12" class="mr-1" onclick="setEmiDuration(this)" /> 12 mo</label>
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <p class="text-gray-300">Monthly Payment: <span class="font-bold">$47.50</span></p>
+          <p class="text-sm text-gray-400">(Total with interest: $285.00)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div class="md:col-span-2 mt-6">
+            <div class="flex items-start">
+              <input
+                type="checkbox"
+                class="mt-1 mr-3 w-5 h-5 accent-purple-500"
+              />
+              <label class="text-gray-400">
+                I agree to the
+                <a href="#" class="text-purple-400 hover:underline"
+                  >Terms of Service</a
+                >
+                and
+                <a href="#" class="text-purple-400 hover:underline"
+                  >Privacy Policy</a
+                >. I understand that my order is non-refundable except under
+                warranty conditions.
+              </label>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 mt-8">
+            <button
+              type="submit"
+              class="w-full btn-primary py-4 rounded-xl font-bold text-lg flex items-center justify-center"
+            >
+              <i class="fas fa-lock mr-3"></i>
+              Complete Purchase {{total_price}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-6 mt-12">
+      <div class="flex items-center">
+        <i class="fas fa-shield-alt text-purple-400 text-2xl mr-3"></i>
+        <span>256-bit SSL Encryption</span>
+      </div>
+      <div class="flex items-center">
+        <i class="fas fa-lock text-purple-400 text-2xl mr-3"></i>
+        <span>Secure Payment</span>
+      </div>
+      <div class="flex items-center">
+        <i class="fas fa-user-shield text-purple-400 text-2xl mr-3"></i>
+        <span>Privacy Protected</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function selectPayment(type, event) {
+    document.getElementById("payment_method").value = type;
+
+    // Highlight selection
+    document.querySelectorAll(".payment-option").forEach((el) => el.classList.remove("selected", "glow"));
+    event.currentTarget.classList.add("selected", "glow");
+
+    // Hide all
+    document.querySelectorAll(".payment-detail").forEach((d) => d.classList.add("hidden"));
+
+    // Show relevant
+    document.getElementById("payment-details").classList.remove("hidden");
+    document.getElementById(`${type}-details`).classList.remove("hidden");
+
+    // Reset transaction ID
+    document.getElementById("transaction_id").value = "";
+    if (document.getElementById("cod-transaction")) {
+      document.getElementById("cod-transaction").value = "";
+    }
+  }
+
+  function setEmiDuration(radio) {
+    document.getElementById("emi_duration").value = radio.value;
+  }
+
+  function validateOrderForm(event) {
+    const paymentMethod = document.getElementById("payment_method").value;
+    const transactionId = document.getElementById("transaction_id").value;
+    const isLoggedIn = {{ request.user.is_authenticated|yesno:"true,false" }}; // Django flag
+
+    if (paymentMethod === 'cod' && transactionId.trim() === "") {
+      alert("Transaction ID is required for Cash on Delivery.");
+      event.preventDefault();
+      return false;
+    }
+
+    if (paymentMethod === 'emi' && isLoggedIn === 'false') {
+      alert("You must be logged in to use EMI payment.");
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
+
+  // Auto-attach validation on load
+  window.onload = function () {
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", validateOrderForm);
+    }
+
+    // Select default
+    const defaultOption = document.querySelector(".payment-option");
+    if (defaultOption) {
+      selectPayment("cod", { currentTarget: defaultOption });
+    }
+  };
+</script>
+{% endblock %}

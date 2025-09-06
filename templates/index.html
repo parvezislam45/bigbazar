@@ -1,0 +1,590 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-gray-900 text-white">
+
+  <!-- Banner Section -->
+  <section class="py-12 px-4">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+      <!-- Left side text content -->
+      <div class="md:w-1/2 mb-10 md:mb-0 px-5">
+        <h1 class="text-3xl md:text-4xl font-black mb-6">Elevate Your Style With Premium Collections</h1>
+        <p class="text-gray-400 mb-8 text-lg">Discover exclusive pieces crafted with precision and attention to detail. Limited edition items that redefine luxury.</p>
+        <div class="flex space-x-4">
+          <button class="bg-gradient-to-r from-purple-600 to-blue-500 px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition">Shop Now</button>
+          <button class="border border-gray-700 px-8 py-3 rounded-lg font-semibold hover:border-purple-500 transition">Explore</button>
+        </div>
+        <div class="mt-16 flex items-center space-x-8">
+          <div>
+            <p class="text-2xl font-extrabold text-center">100+</p>
+            <p class="text-gray-50 font-black text-xl">Brands</p>
+          </div>
+          <div>
+            <p class="text-2xl font-extrabold text-center">2,000+</p>
+            <p class="text-gray-50 font-black text-xl">Products</p>
+          </div>
+          <div>
+            <p class="text-2xl font-extrabold text-center">10,000+</p>
+            <p class="text-gray-50 font-black text-xl">Happy Customers</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right side slider -->
+      <div class="md:w-1/2 relative">
+        <div class="slider-container overflow-hidden rounded-2xl">
+          <div class="slider-track flex transition-transform duration-700 ease-in-out">
+            <div class="slider-slide min-w-full">
+              <img src="https://images.unsplash.com/photo-1709744722656-9b850470293f?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Fashion Model" class="w-full h-[500px] object-cover rounded-2xl">
+            </div>
+            <div class="slider-slide min-w-full">
+              <img src="https://visionemporiumbd.com/images/detailed/175/WhatsApp_Image_2024-07-13_at_2.25.43_PM__1_.jpeg" alt="Fashion Model" class="w-full h-[500px] object-cover rounded-2xl">
+            </div>
+            <div class="slider-slide min-w-full">
+              <img src="https://images.stockcake.com/public/9/8/2/982f0eba-9b38-49f6-94c1-aa1baeb5ee4e_large/glowing-modern-washer-stockcake.jpg" alt="Fashion Model" class="w-full h-[500px] object-cover rounded-2xl">
+            </div>
+          </div>
+        </div>
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+          <button class="slider-indicator w-3 h-3 rounded-full bg-white opacity-50"></button>
+          <button class="slider-indicator w-3 h-3 rounded-full bg-white opacity-50"></button>
+          <button class="slider-indicator w-3 h-3 rounded-full bg-white opacity-50"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="py-16 px-4">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold mb-12 text-center">Featured Products</h2>
+      
+      <!-- Products Subnav -->
+      <div class="flex justify-center mb-12 border-b border-gray-800">
+        <button class="product-tab py-3 px-6 font-medium border-b-2 border-purple-600 text-purple-400 transition" data-category="featured">Featured</button>
+        <button class="product-tab py-3 px-6 font-medium border-b-2 border-transparent hover:text-purple-400 transition" data-category="new">New Arrivals</button>
+        <button class="product-tab py-3 px-6 font-medium border-b-2 border-transparent hover:text-purple-400 transition" data-category="top">Top Rated</button>
+        <button class="product-tab py-3 px-6 font-medium border-b-2 border-transparent hover:text-purple-400 transition" data-category="bestsellers">Best Sellers</button>
+      </div>
+      
+      <!-- Products Container with Auto-slider -->
+      <div class="products-container relative overflow-hidden">
+        <div class="products-track flex transition-transform duration-1000 ease-in-out" data-category="featured">
+          <!-- Product cards will be inserted here by JavaScript -->
+        </div>
+        <div class='text-center mt-16'>
+          <a href="{% url 'store' %}"><button class="view-all-btn bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1">
+                View All Products
+            </button></a>
+           </div>
+        <!-- Navigation arrows -->
+        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 bg-opacity-70 p-2 rounded-r-lg hover:bg-purple-600 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 bg-opacity-70 p-2 rounded-l-lg hover:bg-purple-600 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <div class="container max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">Shop by Category</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto">Discover our wide range of products organized into carefully curated categories to enhance your shopping experience.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+            <!-- Category cards will be generated here -->
+            {% for category in all_categories|slice:":8" %}
+            <div class="category-card rounded-xl p-6 flex flex-col items-center">
+                <div class="category-image-container">
+                    <img src="{{ category.cat_image.url }}"
+                  alt="{{ category.category_name }}" class="category-image w-20 h-20 object-cover rounded-full">
+                </div>
+                <h3 class="font-semibold text-lg mb-2 text-center mt-3">{{ category.category_name }}</h3>
+                
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center">
+          <a href="{% url 'store' %}"><button class="view-all-btn bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1">
+                View All Categories
+            </button></a>
+        </div>
+    </div>
+
+  
+
+  <!-- Promotional Section -->
+  <section class="py-16 px-4 bg-gradient-to-r from-gray-800 to-gray-900 mt-5">
+    <div class="container mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Summer Sale</h2>
+      <p class="text-xl text-purple-300 mb-8">Up to 50% off on selected items</p>
+      <div class="flex justify-center mb-10">
+        <div class="bg-gray-700 rounded-lg p-4 mx-2">
+          <div class="text-3xl font-bold">02</div>
+          <div class="text-gray-400">Days</div>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-4 mx-2">
+          <div class="text-3xl font-bold">18</div>
+          <div class="text-gray-400">Hours</div>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-4 mx-2">
+          <div class="text-3xl font-bold">45</div>
+          <div class="text-gray-400">Minutes</div>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-4 mx-2">
+          <div class="text-3xl font-bold">22</div>
+          <div class="text-gray-400">Seconds</div>
+        </div>
+      </div>
+      <button class="bg-gradient-to-r from-purple-600 to-blue-500 px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition">Shop Now</button>
+    </div>
+  </section>
+<div class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <!-- Banner Container -->
+    <div class="relative w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl">
+        <!-- Background Image with Overlay -->
+        <div class="relative h-96 bg-[url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1800&q=80')] bg-cover bg-center">
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-purple-900/80"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 h-full flex flex-col items-center justify-center text-center text-white p-8">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Business With Us</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-2xl">Join our platform as a vendor and grow your business with thousands of potential customers</p>
+                <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                  <a href="{% url 'vendor-apply' %}">Apply Now <i class="fas fa-arrow-right ml-2"></i></a>
+                    
+                </button>
+                
+                <!-- Features List -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+                    <div class="flex flex-col items-center">
+                        <div class="bg-blue-500/20 p-3 rounded-full mb-2">
+                            <i class="fas fa-users text-2xl text-blue-300"></i>
+                        </div>
+                        <p class="font-semibold">Reach More Customers</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-purple-500/20 p-3 rounded-full mb-2">
+                            <i class="fas fa-chart-line text-2xl text-purple-300"></i>
+                        </div>
+                        <p class="font-semibold">Grow Your Sales</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-green-500/20 p-3 rounded-full mb-2">
+                            <i class="fas fa-tools text-2xl text-green-300"></i>
+                        </div>
+                        <p class="font-semibold">Powerful Tools</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Wave Shape -->
+        <div class="absolute bottom-0 left-0 w-full">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-16 text-gray-900 fill-current">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+            </svg>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Product data
+  const products = [
+    {
+      id: 1,
+      name: "Premium Watch",
+      price: 249.99,
+      rating: 4,
+      reviews: 128,
+      image: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+      categories: ["featured", "bestsellers"]
+    },
+    {
+      id: 2,
+      name: "Designer Handbag",
+      price: 189.99,
+      rating: 5,
+      reviews: 87,
+      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80",
+      categories: ["new", "featured"]
+    },
+    {
+      id: 3,
+      name: "Wireless Headphones",
+      price: 159.99,
+      rating: 4,
+      reviews: 204,
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      categories: ["top", "bestsellers"]
+    },
+    {
+      id: 4,
+      name: "Sunglasses",
+      price: 129.99,
+      rating: 5,
+      reviews: 56,
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80",
+      categories: ["new", "featured"]
+    },
+    {
+      id: 5,
+      name: "Leather Wallet",
+      price: 79.99,
+      rating: 4,
+      reviews: 92,
+      image: "https://images.unsplash.com/photo-1627123424574-724758594e93?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+      categories: ["bestsellers"]
+    },
+    {
+      id: 6,
+      name: "Fitness Tracker",
+      price: 89.99,
+      rating: 4,
+      reviews: 143,
+      image: "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+      categories: ["new", "top"]
+    },
+    {
+      id: 7,
+      name: "Perfume",
+      price: 69.99,
+      rating: 5,
+      reviews: 78,
+      image: "https://img.freepik.com/free-vector/vector-3d-realistic-perfume-bottle-women-shiny-glass-container-with-pink-liquid_33099-1226.jpg?semt=ais_hybrid&w=740&q=80",
+      categories: ["featured"]
+    },
+    {
+      id: 8,
+      name: "Smart Speaker",
+      price: 129.99,
+      rating: 4,
+      reviews: 112,
+      image: "https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80",
+      categories: ["top", "bestsellers"]
+    },
+    {
+      id: 9,
+      name: "Running Shoes",
+      price: 119.99,
+      rating: 5,
+      reviews: 201,
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+      categories: ["new", "top"]
+    },
+    {
+      id: 10,
+      name: "Backpack",
+      price: 99.99,
+      rating: 4,
+      reviews: 95,
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+      categories: ["featured", "bestsellers"]
+    }
+  ];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Banner slider functionality
+    const bannerTrack = document.querySelector('.slider-track');
+    const bannerSlides = document.querySelectorAll('.slider-slide');
+    const indicators = document.querySelectorAll('.slider-indicator');
+    let currentIndex = 0;
+    
+    function updateBannerSlider() {
+      bannerTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach((indicator, index) => {
+        if (index === currentIndex) {
+          indicator.classList.remove('opacity-50');
+          indicator.classList.add('opacity-100', 'bg-purple-500');
+        } else {
+          indicator.classList.add('opacity-50');
+          indicator.classList.remove('opacity-100', 'bg-purple-500');
+        }
+      });
+    }
+    
+    // Auto-play banner slider
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % bannerSlides.length;
+      updateBannerSlider();
+    }, 5000);
+    
+    // Initialize indicators
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        currentIndex = index;
+        updateBannerSlider();
+      });
+    });
+    
+    // Products slider functionality
+    const productsTrack = document.querySelector('.products-track');
+    let productsPerView = 4; // Default for large screens
+    let productIndex = 0;
+    let autoSlideInterval;
+    
+    // Determine how many products to show based on screen size
+    function updateProductsPerView() {
+      if (window.innerWidth < 640) {
+        productsPerView = 1;
+      } else if (window.innerWidth < 1024) {
+        productsPerView = 2;
+      } else if (window.innerWidth < 1280) {
+        productsPerView = 3;
+      } else {
+        productsPerView = 4;
+      }
+    }
+    
+    // Render products for a specific category
+    function renderProducts(category) {
+      productsTrack.innerHTML = '';
+      
+      const filteredProducts = products.filter(product => 
+        category === 'featured' ? true : product.categories.includes(category)
+      );
+      
+      // Duplicate products for seamless infinite scroll
+      const duplicatedProducts = [...filteredProducts, ...filteredProducts];
+      
+      duplicatedProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-slide min-w-[calc(100%/var(--products-per-view))] px-4';
+        productCard.innerHTML = `
+          <div class="bg-gray-800 rounded-xl overflow-hidden hover:scale-105 transition duration-300">
+            <div class="relative">
+              <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover">
+              <button class="absolute top-4 right-4 bg-gray-900 rounded-full p-2 hover:bg-purple-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
+              <div class="flex items-center mb-2">
+                <div class="flex text-yellow-400">
+                  ${'★'.repeat(product.rating)}${'☆'.repeat(5 - product.rating)}
+                </div>
+                <span class="text-gray-400 text-sm ml-2">(${product.reviews})</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xl font-bold">$${product.price.toFixed(2)}</span>
+                <a href="{% url 'store' %}" class="bg-purple-600 text-white py-2 px-4 rounded-lg text-sm hover:bg-purple-700 transition">View All</a>
+              </div>
+            </div>
+          </div>
+        `;
+        productsTrack.appendChild(productCard);
+      });
+      
+      // Set CSS variable for products per view
+      updateProductsPerView();
+      document.documentElement.style.setProperty('--products-per-view', productsPerView);
+      
+      // Reset index and position
+      productIndex = 0;
+      updateProductsSlider();
+      
+      // Restart auto-slide
+      startAutoSlide();
+    }
+    
+    // Update products slider position
+    function updateProductsSlider() {
+      const slideWidth = 100 / productsPerView;
+      productsTrack.style.transform = `translateX(-${productIndex * slideWidth}%)`;
+    }
+    
+    // Start auto-sliding products
+    function startAutoSlide() {
+      clearInterval(autoSlideInterval);
+      
+      autoSlideInterval = setInterval(() => {
+        const filteredProducts = products.filter(product => 
+          document.querySelector('.product-tab.border-purple-600').dataset.category === 'featured' ? 
+          true : product.categories.includes(document.querySelector('.product-tab.border-purple-600').dataset.category)
+        );
+        
+        productIndex++;
+        
+        // When we reach the end of the original set, seamlessly reset
+        if (productIndex >= filteredProducts.length) {
+          // Jump back to the beginning without animation
+          productsTrack.style.transition = 'none';
+          productIndex = 0;
+          updateProductsSlider();
+          
+          // Force a reflow
+          void productsTrack.offsetWidth;
+          
+          // Restore transition
+          productsTrack.style.transition = 'transform 1000ms ease-in-out';
+        }
+        
+        updateProductsSlider();
+      }, 3000);
+    }
+    
+    // Initial render
+    renderProducts('featured');
+    
+    // Products tabs functionality
+    const productTabs = document.querySelectorAll('.product-tab');
+    
+    productTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        productTabs.forEach(t => t.classList.remove('border-purple-600', 'text-purple-400'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('border-purple-600', 'text-purple-400');
+        
+        // Filter products based on category
+        const category = tab.getAttribute('data-category');
+        renderProducts(category);
+      });
+    });
+    
+    // Update on resize
+    window.addEventListener('resize', () => {
+      updateProductsPerView();
+      document.documentElement.style.setProperty('--products-per-view', productsPerView);
+      updateProductsSlider();
+    });
+    
+    // Manual navigation
+    const prevButton = document.querySelector('.products-container button:first-of-type');
+    const nextButton = document.querySelector('.products-container button:last-of-type');
+    
+    prevButton.addEventListener('click', () => {
+      const filteredProducts = products.filter(product => 
+        document.querySelector('.product-tab.border-purple-600').dataset.category === 'featured' ? 
+        true : product.categories.includes(document.querySelector('.product-tab.border-purple-600').dataset.category)
+      );
+      
+      productIndex = (productIndex - 1 + filteredProducts.length) % filteredProducts.length;
+      updateProductsSlider();
+      
+      // Restart auto-slide timer
+      startAutoSlide();
+    });
+    
+    nextButton.addEventListener('click', () => {
+      const filteredProducts = products.filter(product => 
+        document.querySelector('.product-tab.border-purple-600').dataset.category === 'featured' ? 
+        true : product.categories.includes(document.querySelector('.product-tab.border-purple-600').dataset.category)
+      );
+      
+      productIndex = (productIndex + 1) % filteredProducts.length;
+      updateProductsSlider();
+      
+      // Restart auto-slide timer
+      startAutoSlide();
+    });
+  });
+</script>
+<script>
+        // Simple animation for page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = 1;
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+
+<style>
+  /* Custom styles for the dark theme */
+  body {
+    background-color: #111827;
+    color: #fff;
+  }
+  
+  /* Smooth transitions for all interactive elements */
+  * {
+    transition-property: color, background-color, border-color, transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+  
+  /* Products slider specific styles */
+  .products-track {
+    --products-per-view: 4;
+  }
+  
+  .product-slide {
+    min-width: calc(100% / var(--products-per-view));
+  }
+  
+  /* Hide scrollbar for products track */
+  .products-container {
+    overflow: hidden;
+  }
+  .category-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .category-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+        }
+        
+        .view-all-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .view-all-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .view-all-btn:hover:before {
+            left: 100%;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+</style>
+
+{% endblock %}

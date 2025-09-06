@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-950 py-8 px-4">
+  <div class="max-w-4xl mx-auto bg-black rounded-lg shadow-md overflow-hidden">
+    <div class="bg-blue-600 py-4 px-6">
+      <h1 class="text-2xl font-bold text-white">Vendor Application Form</h1>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+      {% csrf_token %}
+      
+      {% if errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <ul>
+            {% for field, error_list in errors.items %}
+              {% for error in error_list %}
+                <li>{{ field|title }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Business Information -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-50 border-b border-green-400 pb-2">Business Information</h2>
+          
+          <div>
+            <label for="business_name" class="block text-sm font-medium text-gray-50">Business Name*</label>
+            <input type="text" id="business_name" name="business_name" required
+                   class="mt-1 block w-full px-2 py-2 border border-gray-300 bg-gray-900 text-white rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="business_email" class="block text-sm font-medium text-gray-50">Business Email*</label>
+            <input type="email" id="business_email" name="business_email" required
+                   class="mt-1 block w-full px-2 py-2 border border-gray-300 bg-gray-900 rounded-md text-white border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="phone_number" class="block text-sm font-medium text-gray-50">Phone Number*</label>
+            <input type="text" id="phone_number" name="phone_number" required
+                   class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 text-white border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="website" class="block text-sm font-medium text-gray-50">Website (optional)</label>
+            <input type="text" id="website" name="website"
+                   class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 border-gray-300 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="business_description" class="block text-sm font-medium text-gray-50">Business Description*</label>
+            <textarea id="business_description" name="business_description" rows="3" required
+                      class="mt-1 block w-full border border-gray-300 bg-gray-900 rounded-md border-gray-300 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+          </div>
+        </div>
+        
+        <!-- Business Registration -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-50 border-b border-green-400 pb-2">Business Registration</h2>
+          
+          <div>
+            <label for="registration_number" class="block text-sm font-medium text-gray-50">Registration Number</label>
+            <input type="text" id="registration_number" name="registration_number"
+                   class="mt-1 block w-full px-2 py-2 border border-gray-300 bg-gray-900 rounded-md border-gray-300 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="tax_id" class="block text-sm font-medium text-gray-50">Tax ID / Tin No</label>
+            <input type="text" id="tax_id" name="tax_id"
+                   class="mt-1 block w-full px-2 py-2 border border-gray-300 bg-gray-900 rounded-md border-gray-300 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label for="license_image" class="block text-sm font-medium text-gray-50">Business License*</label>
+            <input type="file" id="license_image" name="license_image" accept="image/*" required
+                   class="mt-1 block w-full text-sm px-2 py-2 border border-gray-300 bg-gray-900 text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                   onchange="previewImage(this, 'licensePreview')">
+            <img id="licensePreview" class="mt-2 h-32 hidden rounded-md border">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Address Information -->
+      <!-- Address Information -->
+<div class="space-y-4 border-t border-green-400 pt-6">
+  <h2 class="text-lg font-semibold text-gray-50">Address Information</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div>
+      <label for="present-division" class="block text-sm font-medium  text-gray-50">Division*</label>
+      <select id="present-division" name="division" required
+              class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 border-gray-300 shadow-sm text-white focus:border-blue-500 focus:ring-blue-500">
+        <option value="">Select</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="present-district" class="block text-sm font-medium text-gray-50">District*</label>
+      <select id="present-district" name="district" required
+              class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 shadow-sm text-white focus:border-blue-500 focus:ring-blue-500" disabled>
+        <option value="">Select</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="present-upazila" class="block text-sm font-medium text-gray-50">Sub-District (Upazila)*</label>
+      <select id="present-upazila" name="sub_district" required
+              class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 shadow-sm text-white focus:border-blue-500 focus:ring-blue-500" disabled>
+        <option value="">Select</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="present-union-container" class="hidden">
+    <label for="present-union" class="block text-sm font-medium text-gray-50 mt-4">Union</label>
+    <select id="present-union" name="union"
+            class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 shadow-sm text-white focus:border-blue-500 focus:ring-blue-500" disabled>
+      <option value="">Select</option>
+    </select>
+  </div>
+
+  <div class="mt-4">
+    <label for="address" class="block text-sm font-medium text-gray-50">House Nob/ Street*</label>
+    <textarea id="address" name="address" rows="2" required
+              class="mt-1 block w-full rounded-md px-2 py-2 border border-gray-300 bg-gray-900 shadow-sm text-white focus:border-blue-500 focus:ring-blue-500"></textarea>
+  </div>
+</div>
+
+      
+      <!-- Identity Verification -->
+      <div class="space-y-4 border-t border-green-400 pt-6">
+        <h2 class="text-lg font-semibold text-gray-50">Identity Verification</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="profile_image" class="block text-sm font-medium text-gray-50">Profile Image*</label>
+            <input type="file" id="profile_image" name="profile_image" accept="image/*" required
+                   class="mt-1 block w-full text-sm px-2 py-2 bg-transparent text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                   onchange="previewImage(this, 'profilePreview')">
+            <img id="profilePreview" class="mt-2 h-32 hidden rounded-full border">
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="nid_front" class="block text-sm font-medium text-gray-50">NID Front*</label>
+              <input type="file" id="nid_front" name="nid_front" accept="image/*" required
+                     class="mt-1 block w-full text-sm px-2 py-2 bg-transparent text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                     onchange="previewImage(this, 'nidFrontPreview')">
+              <img id="nidFrontPreview" class="mt-2 h-32 hidden rounded-md border">
+            </div>
+            
+            <div>
+              <label for="nid_back" class="block text-sm font-medium text-gray-50">NID Back*</label>
+              <input type="file" id="nid_back" name="nid_back" accept="image/*" required
+                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                     onchange="previewImage(this, 'nidBackPreview')">
+              <img id="nidBackPreview" class="mt-2 h-32 hidden rounded-md border">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end pt-6 border-t border-green-400">
+        <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+  const preview = document.getElementById(previewId);
+  const file = input.files[0];
+  
+  if (file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.classList.remove('hidden');
+    }
+    
+    reader.readAsDataURL(file);
+  }
+}
+</script>
+{% endblock %}

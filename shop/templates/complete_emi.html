@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-primary text-white">
+            <h3>Complete EMI Details</h3>
+        </div>
+        <div class="card-body">
+            <h5>Order #{{ order.id }}</h5>
+            <p>Product: {{ order.product.product_name }}</p>
+            <p>Total: {{ order.total_price }}</p>
+            <hr>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label>Bank Name</label>
+                    <input type="text" name="emi_bank" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>EMI Duration (months)</label>
+                    <input type="number" name="emi_duration" class="form-control" min="3" max="24" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Confirm EMI</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

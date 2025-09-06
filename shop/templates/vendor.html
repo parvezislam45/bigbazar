@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Vendor Dashboard</h1>
+<p class="text-white">Welcome back, {{ request.user.username }}! Here's your business summary.</p>
+    <div>
+                            <h3 class="text-lg font-semibold white">Total Orders</h3>
+                            <p class="text-3xl text-white font-bold mt-2">{{ total_orders }}</p>
+                            <p class="text-3xl font-bold mt-2">{{ total_products }}</p>
+                            <p class="font-medium">${{ total_revenue }}</p>
+                              
+                        </div>
+
+    <h1 class="text-2xl font-bold mb-4">Orders for Your Products</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+            <thead class="bg-gray-100 text-gray-700">
+                <tr>
+                    <th class="px-4 py-2 text-left">Order ID</th>
+                    <th class="px-4 py-2 text-left">Product</th>
+                    <th class="px-4 py-2 text-left">Quantity</th>
+                    <th class="px-4 py-2 text-left">Total</th>
+                    <th class="px-4 py-2 text-left">Status</th>
+                    <th class="px-4 py-2 text-left">Payment</th>
+                    <th class="px-4 py-2 text-left">Date</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600">
+                 {% for order in vendor_orders %}
+                <tr class="border-t">
+                    <td>{{ order.id }}</td>
+                        <td>{{ order.product.product_name }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>{{ order.total_quantity }}</td>
+                        <td>{{ order.subtotal }}</td>
+                        <td>{{ order.shipping_charge }}</td>
+                        <td>{{ order.total_price }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.payment_method }}</td>
+                        <td>{{ order.transaction_id|default:"N/A" }}</td>
+                        <td>{{ order.is_paid|yesno:"Yes,No" }}</td>
+                        <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-4">No orders found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </table>
+    
+{% endblock  %}

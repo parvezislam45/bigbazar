@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --dark: #0f172a;
+            --darker: #0a0e1a;
+            --light: #1e293b;
+            --lighter: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, var(--light), var(--darker));
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .form-input {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            color: var(--text);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            outline: none;
+        }
+        
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-delivered {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+        
+        .status-processing {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+        
+        .status-shipped {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .order-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem 0;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Vendor Banner Styles */
+        .vendor-banner {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vendor-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(-15deg);
+        }
+        
+        .vendor-banner-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .vendor-banner h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vendor-banner p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+        
+        .vendor-features {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .vendor-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .vendor-feature i {
+            color: #10b981;
+        }
+        
+        /* New Banner Styles */
+        .business-banner {
+            position: relative;
+            height: 320px;
+            background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1800&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .business-banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(79, 70, 229, 0.85), rgba(124, 58, 237, 0.85));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            color: white;
+        }
+        
+        .business-banner h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .business-banner p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .business-features {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .business-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .business-feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .business-feature-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+    </style>
+
+    <div class="min-h-screen flex flex-col">
+        <div class="flex flex-1">
+            <!-- Sidebar -->
+            <aside class="hidden md:block w-64 bg-[#0a0e1a] border-r border-[#1e293b] p-6">
+                {% if request.user.is_authenticated %}
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="avatar">{{ request.user.username|first|upper }}</div>
+                    <div>
+                        <h2 class="font-semibold">{{ request.user.username }}</h2>
+                    </div>
+                </div>
+                {% endif %}
+                <nav class="space-y-1">
+                    <div class="nav-item active" data-tab="dashboard">
+                        <i class="fas fa-home mr-3"></i> Dashboard
+                    </div>
+                    <div class="nav-item" data-tab="orders">
+                        <i class="fas fa-shopping-bag mr-3"></i> Orders
+                    </div>
+                    <div class="nav-item" data-tab="profile">
+                        <i class="fas fa-user mr-3"></i> Profile
+                    </div>
+                    <div class="nav-item" data-tab="security">
+                        <i class="fas fa-lock mr-3"></i> Security
+                    </div>
+                    <div class="nav-item" data-tab="address">
+                        <i class="fas fa-map-marker-alt mr-3"></i> Addresses
+                    </div>
+                    <div class="nav-item" data-tab="wishlist">
+                        <i class="fas fa-heart mr-3"></i> Wishlist
+                    </div>
+                    <div class="nav-item mt-8 text-[#ef4444]" data-tab="logout">
+                        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-3"></i> Logout</a>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Business Banner -->
+                <div class="business-banner">
+                    <div class="business-banner-overlay">
+                        <h2>Business With Us</h2>
+                        <p>Become a vendor and grow your business with thousands of potential customers</p>
+                        <a href="{% url 'vendor-apply' %}" class="bg-white text-[#6366f1] font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            Apply Now <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        
+                        <div class="business-features">
+                            <div class="business-feature">
+                                <div class="business-feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <span>Reach More Customers</span>
+                            </div>
+                            <div class="business-feature">
+                                <div class="business-feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <span>Grow Your Sales</span>
+                            </div>
+                            <div class="business-feature">
+                                <div class="business-feature-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <span>Powerful Tools</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active mt-10">
+                    <h2 class="text-2xl font-bold mb-6">Dashboard Overview</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                        <div class="card text-center">
+                            <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#6366f1]/20 flex items-center justify-center">
+                                <i class="fas fa-shopping-bag text-[#6366f1]"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-1">12</h3>
+                            <p class="text-[#94a3b8]">Total Orders</p>
+                        </div>
+                        
+                        <div class="card text-center">
+                            <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#f59e0b]/20 flex items-center justify-center">
+                                <i class="fas fa-clock text-[#f59e0b]"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-1">3</h3>
+                            <p class="text-[#94a3b8]">Pending Orders</p>
+                        </div>
+                        
+                        <div class="card text-center">
+                            <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#ef4444]/20 flex items-center justify-center">
+                                <i class="fas fa-heart text-[#ef4444]"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-1">8</h3>
+                            <p class="text-[#94a3b8]">Wishlist Items</p>
+                        </div>
+                        
+                        <div class="card text-center">
+                            <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#10b981]/20 flex items-center justify-center">
+                                <i class="fas fa-wallet text-[#10b981]"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-1">$245</h3>
+                            <p class="text-[#94a3b8]">Account Balance</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div class="card">
+                            <h3 class="font-semibold text-lg mb-4">Recent Orders</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-medium">Order #3245</p>
+                                        <p class="text-sm text-[#94a3b8]">July 12, 2023</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">$125.99</p>
+                                        <span class="status-badge status-delivered">Delivered</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-medium">Order #3244</p>
+                                        <p class="text-sm text-[#94a3b8]">July 10, 2023</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium">$89.50</p>
+                                        <span class="status-badge status-shipped">Shipped</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full mt-4 text-[#6366f1] hover:text-[#4f46e5] text-sm font-medium">
+                                View All Orders <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="font-semibold text-lg mb-4">Account Status</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span>Membership Level</span>
+                                    <span class="font-medium text-[#f59e0b]">Gold Member</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>Email Verification</span>
+                                    <span class="font-medium text-[#10b981]">Verified</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>Phone Verification</span>
+                                    <span class="font-medium text-[#ef4444]">Pending</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span>Security Level</span>
+                                    <span class="font-medium text-[#3b82f6]">Strong</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 bg-[#1e293b] rounded-full h-2">
+                                <div class="bg-[#6366f1] h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                            <p class="text-sm text-[#94a3b8] mt-2">Profile completeness: 75%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Orders Tab -->
+                <div id="orders" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6">Order History</h2>
+                    
+                    <div class="card">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left border-b border-[#334155]">
+                                        <th class="pb-3">Order ID</th>
+                                        <th class="pb-3">Date</th>
+                                        <th class="pb-3">Amount</th>
+                                        <th class="pb-3">Status</th>
+                                        <th class="pb-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-[#334155]">
+                                        <td class="py-3">#3245</td>
+                                        <td class="py-3">Jul 12, 2023</td>
+                                        <td class="py-3">$125.99</td>
+                                        <td class="py-3"><span class="status-badge status-delivered">Delivered</span></td>
+                                        <td class="py-3 text-right">
+                                            <button class="text-[#6366f1] hover:text-[#4f46e5]">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-[#334155]">
+                                        <td class="py-3">#3244</td>
+                                        <td class="py-3">Jul 10, 2023</td>
+                                        <td class="py-3">$89.50</td>
+                                        <td class="py-3"><span class="status-badge status-shipped">Shipped</span></td>
+                                        <td class="py-3 text-right">
+                                            <button class="text-[#6366f1] hover:text-[#4f46e5]">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3">#3241</td>
+                                        <td class="py-3">Jul 5, 2023</td>
+                                        <td class="py-3">$245.67</td>
+                                        <td class="py-3"><span class="status-badge status-processing">Processing</span></td>
+                                        <td class="py-3 text-right">
+                                            <button class="text-[#6366f1] hover:text-[#4f46e5]">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Tab -->
+                <div id="profile" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6">Profile Information</h2>
+                    
+                    <div class="card max-w-2xl">
+                        <form class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[#94a3b8] mb-2">First Name</label>
+                                    <input type="text" value="John" class="form-input">
+                                </div>
+                                <div>
+                                    <label class="block text-[#94a3b8] mb-2">Last Name</label>
+                                    <input type="text" value="Doe" class="form-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">Email Address</label>
+                                <input type="email" value="john.doe@example.com" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">Phone Number</label>
+                                <input type="tel" value="+1 (555) 123-4567" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">Bio</label>
+                                <textarea class="form-input h-24">I'm a passionate shopper who loves finding great deals on quality products!</textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="btn btn-primary">Update Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Security Tab -->
+                <div id="security" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-6">Security Settings</h2>
+                    
+                    <div class="card max-w-2xl">
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">Current Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">New Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+                            <div>
+                                <label class="block text-[#94a3b8] mb-2">Confirm New Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+                            <div class="flex items-center">
+                                <input id="forgot-checkbox" type="checkbox" class="form-input w-4 h-4">
+                                <label for="forgot-checkbox" class="ml-2 text-sm text-[#94a3b8]">I forgot my password and need to reset it</label>
+                            </div>
+                            <div class="flex justify-end">
+                                <button class="btn btn-primary">Update Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <div class="fixed bottom-0 left-0 right-0 bg-[#0a0e1a] border-t border-[#1e293b] p-3 md:hidden">
+                    <div class="flex justify-around">
+                        <button class="nav-item active flex flex-col items-center text-xs" data-tab="dashboard">
+                            <i class="fas fa-home mb-1"></i>
+                            <span>Home</span>
+                        </button>
+                        <button class="nav-item flex flex-col items-center text-xs" data-tab="orders">
+                            <i class="fas fa-shopping-bag mb-1"></i>
+                            <span>Orders</span>
+                        </button>
+                        <button class="nav-item flex flex-col items-center text-xs" data-tab="profile">
+                            <i class="fas fa-user mb-1"></i>
+                            <span>Profile</span>
+                        </button>
+                        <button class="nav-item flex flex-col items-center text-xs" data-tab="security">
+                            <i class="fas fa-cog mb-1"></i>
+                            <span>Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            // Tab switching functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabItems = document.querySelectorAll('.nav-item');
+                const tabContents = document.querySelectorAll('.tab-content');
+                
+                tabItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const tabId = this.getAttribute('data-tab');
+                        
+                        // Handle logout separately
+                        if (tabId === 'logout') {
+                            if (confirm('Are you sure you want to logout?')) {
+                                alert('Logout successful!');
+                            }
+                            return;
+                        }
+                        
+                        // Activate clicked tab
+                        tabItems.forEach(tab => tab.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Show corresponding content
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

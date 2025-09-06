@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-success text-white">
+            <h3>Payment Successful!</h3>
+        </div>
+        <div class="card-body">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+            <h4 class="mt-3">Thank You for Your Payment</h4>
+            <p>Your order has been confirmed and is being processed</p>
+            <p>Transaction ID: {{ order.transaction_id }}</p>
+            <a href="{% url 'user_dashboard' %}" class="btn btn-primary mt-3">
+                View Your Orders
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

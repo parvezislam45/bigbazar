@@ -1,0 +1,168 @@
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-6 text-center">Add Category</h1>
+    
+    <!-- Category Form -->
+    <form id="categoryForm" method="POST" enctype="multipart/form-data" 
+          class="w-full max-w-sm mx-auto bg-gray-800 p-8 rounded-md shadow-md mb-10">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray-100 text-md font-bold mb-2" for="category_name">
+                Category Name
+            </label>
+            <input class="w-full px-3 py-2 border border-gray-400 bg-gray-950 rounded-md 
+                         focus:outline-none focus:border-indigo-500"
+                type="text" id="category_name" name="category_name" placeholder="Category Name" required>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-100 text-md font-bold mb-2" for="cat_image">
+                Image
+            </label>
+            <input class="w-full px-3 py-2 border border-gray-400 bg-gray-950 rounded-md 
+                         focus:outline-none focus:border-indigo-500"
+                type="file" id="cat_image" name="cat_image">
+        </div>
+        <button
+            class="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md 
+                   hover:bg-indigo-600 transition duration-300"
+            type="submit">
+            Add Category
+        </button>
+    </form>
+
+    <!-- Subcategory Form -->
+    <h1 class="text-2xl font-bold mb-6 text-center">Add SubCategory</h1>
+    <form id="subcategoryForm" method="POST" enctype="multipart/form-data" 
+          class="w-full max-w-sm mx-auto bg-gray-800 p-8 rounded-md shadow-md">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray-100 text-md font-bold mb-2" for="categorySelect">
+                Select Category
+            </label>
+            <select id="categorySelect" name="category" required
+                class="w-full px-3 py-2 border border-gray-400 bg-gray-950 rounded-md 
+                       focus:outline-none focus:border-indigo-500">
+                <!-- Categories will be loaded here -->
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-100 text-md font-bold mb-2" for="subcategory_name">
+                SubCategory Name
+            </label>
+            <input class="w-full px-3 py-2 border border-gray-400 bg-gray-950 rounded-md 
+                         focus:outline-none focus:border-indigo-500"
+                type="text" id="subcategory_name" name="subcategory_name" 
+                placeholder="SubCategory Name" required>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-100 text-md font-bold mb-2" for="subcat_image">
+                Image
+            </label>
+            <input class="w-full px-3 py-2 border border-gray-400 bg-gray-950 rounded-md 
+                         focus:outline-none focus:border-indigo-500"
+                type="file" id="subcat_image" name="subcat_image">
+        </div>
+        <button
+            class="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md 
+                   hover:bg-indigo-600 transition duration-300"
+            type="submit">
+            Add SubCategory
+        </button>
+    </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+// -------------------------
+// Get CSRF Token from Cookies
+// -------------------------
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// -------------------------
+// DOM Elements
+// -------------------------
+const categoryForm = document.getElementById('categoryForm');
+const subcategoryForm = document.getElementById('subcategoryForm');
+const categorySelect = document.getElementById('categorySelect');
+
+// -------------------------
+// Load Categories into Select Dropdown
+// -------------------------
+async function loadCategories() {
+    const res = await fetch('/categories/');
+    const categories = await res.json();
+    categorySelect.innerHTML = '';
+    categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.category_name;
+        categorySelect.appendChild(option);
+    });
+}
+
+// -------------------------
+// Submit Category Form
+// -------------------------
+categoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(categoryForm);
+    const res = await fetch('/categories/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        body: formData
+    });
+
+    if (res.ok) {
+        alert('Category added successfully!');
+        categoryForm.reset();
+        await loadCategories();
+    } else {
+        alert('Failed to add category!');
+    }
+});
+
+// -------------------------
+// Submit SubCategory Form
+// -------------------------
+subcategoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(subcategoryForm);
+    const res = await fetch('/subcategories/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        body: formData
+    });
+
+    if (res.ok) {
+        alert('SubCategory added successfully!');
+        subcategoryForm.reset();
+    } else {
+        alert('Failed to add subcategory!');
+    }
+});
+
+// -------------------------
+// Load categories on page load
+// -------------------------
+window.onload = loadCategories;
+</script>
+{% endblock %}

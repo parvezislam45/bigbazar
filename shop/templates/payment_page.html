@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-primary text-white">
+            <h3>Payment Gateway</h3>
+        </div>
+        <div class="card-body">
+            <h4>Order #{{ order.id }}</h4>
+            <p>Total Amount: {{ order.total_price }}</p>
+            <p>Product: {{ order.product.product_name }}</p>
+            <hr>
+            
+            <div class="mt-4">
+                <p>Simulating SSLCommerz Payment</p>
+                <form action="{{ payment_url }}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-lg">Confirm Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

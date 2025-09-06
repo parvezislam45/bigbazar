@@ -1,0 +1,294 @@
+{% block content %}
+<div class="bg-gray-900 p-10">
+  <div class="max-w-6xl mx-auto bg-gray-900 p-8 rounded shadow">
+    <h1 class="text-3xl font-bold mb-6 text-white">Product Dashboard</h1>
+    <div class='overflow-x-auto'>
+      <table class="min-w-full">
+  <thead>
+    <tr class="header-gradient">
+      <th class="px-6 py-4 text-left text-sm font-bold uppercase tracking-wider">
+        <div class="flex items-center">
+          <i class="fas fa-box mr-2"></i> Product
+        </div>
+      </th>
+      <th class="px-6 py-4 text-left font-bold text-sm uppercase tracking-wider">
+        <div class="flex items-center">
+          <i class="fas fa-tag mr-2"></i> Price
+        </div>
+      </th>
+      <th class="px-6 py-4 text-left font-bold text-sm uppercase tracking-wider">
+        <div class="flex items-center">
+          <i class="fas fa-layer-group mr-2"></i> Stock
+        </div>
+      </th>
+      <!-- Hidden Description column -->
+      <th class="px-6 py-4 text-left font-bold text-sm uppercase tracking-wider hidden">
+        <div class="flex items-center">
+          <i class="fas fa-align-left mr-2"></i> Description
+        </div>
+      </th>
+      <!-- Hidden Brand column -->
+      <th class="px-6 py-4 text-left font-bold text-sm uppercase tracking-wider hidden">
+        <div class="flex items-center">
+          <i class="fas fa-tag mr-2"></i> Brand
+        </div>
+      </th>
+      <th class="px-24 py-4 text-left font-bold text-sm uppercase tracking-wider">
+        <div class="flex items-center">
+          <i class="fas fa-bolt mr-2"></i> Actions
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-slate-700/50">
+    {% for product in products %}
+    <tr data-id="{{ product.id }}" class="table-row bg-slate-800/30">
+      <td class="px-6 py-5">
+        <div class="flex items-center">
+          <div class="bg-indigo-900/50 rounded-lg p-2 mr-4">
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.product_name }}" class="object-contain h-10 w-10 rounded-full">
+          </div>
+          <div>
+            <div class="font-medium text-white text-sm product-name">{{ product.product_name }}</div>
+            <div class="text-sm text-indigo-300 mt-1">{{ product.category_name }}</div>
+          </div>
+        </div>
+      </td>
+      <td class="px-8 py-5">
+        <div class="font-semibold text-sm price">${{ product.price }}</div>
+      </td>
+      <td class="px-6 py-5">
+        <div class="stock-high font-semibold text-sm stock">
+          <i class="fas fa-check-circle mr-2"></i> {{ product.stock }} in stock
+        </div>
+        <div class="w-full bg-slate-700 rounded-full h-1 mt-2">
+          <div class="bg-green-500 h-1 rounded-full"></div>
+        </div>
+      </td>
+      <!-- Hidden Description -->
+      <td class="px-6 py-5 hidden">
+        <div class="text-sm text-slate-300 description">{{ product.description }}</div>
+      </td>
+      <!-- Hidden Brand -->
+      <td class="px-6 py-5 hidden">
+        <div class="text-sm text-slate-300 brand">{{ product.brand }}</div>
+      </td>
+      <td class="px-6 py-5">
+        <div class="flex gap-3">
+          <button onclick="openUpdateModal({{ product.id }})" class="action-btn bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 rounded-lg flex items-center text-xs font-bold">
+            <i class="fas fa-edit mr-2"></i> Update
+          </button>
+          <button onclick="deleteProduct({{ product.id }})" class="action-btn bg-red-600 hover:bg-red-700 text-white px-2 py-2 rounded-lg flex items-center text-xs font-bold">
+            <i class="fas fa-trash mr-2"></i> Delete
+          </button>
+          <button onclick="openDiscountModal({{ product.id }}, '{{ product.discount|default_if_none:'' }}')" class="action-btn bg-gradient-to-r from-purple-600 to-pink-500 hover:opacity-90 text-white px-2 py-2 rounded-lg flex items-center text-xs font-bold">
+            <i class="fas fa-percent mr-2"></i> Discount
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    </div>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<div id="updateModal" class="hidden fixed inset-0 flex justify-center items-center z-50">
+  <div class="text-white p-6 rounded-lg shadow-lg max-w-lg">
+    <form id="updateForm"class="relative space-y-3 rounded-md bg-purple-900 p-6 shadow-xl lg:p-10 border border-gray-100 m-10">
+      <input type="hidden" name="id" id="updateProductId" />
+      <div>
+    <label class="">Product Name</label>
+    <input type="text" name="product_name" id="updateProductName" class="w-full mb-2 p-2 border rounded bg-purple-950 text-white" placeholder="Product Name" />
+  </div>
+      <div>
+    <label class="">Description</label>
+    <textarea 
+      name="description" 
+      id="updateDescription" 
+      rows="4" 
+      class="w-full mb-2 p-2 border rounded bg-purple-950 text-white">
+  </textarea>
+  </div>
+  <div>
+    <label class="">Brand</label>
+    <input type="text" name="brand" id="updateBrand" class="w-full mb-2 p-2 border rounded bg-purple-950 text-white" />
+  </div>
+  <div>
+    <label class="">Price</label>
+    <input type="number" name="price" id="updatePrice" class="w-full mb-2 p-2 border rounded bg-purple-950 text-white" />
+  </div>
+  <div>
+    <label class="">Stock</label>
+    <input type="number" name="stock" id="updateStock" class="w-full mb-2 p-2 border rounded bg-purple-950 text-white" />
+  </div>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+      <button type="button" onclick="closeUpdateModal()" class="ml-2 px-4 py-2 text-white">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<!-- Discount Modal -->
+<div id="discountModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-black p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-lg font-semibold mb-4">Set Discount</h2>
+    <form id="discountForm">
+      <input type="hidden" name="id" id="discountProductId" />
+
+      <label class="block mb-2">Discount Percentage (%)</label>
+      <input type="number" id="discountPercent" class="w-full mb-4 p-2 border rounded bg-transparent text-white" placeholder="Enter discount percentage" />
+
+      <label class="block mb-2">Discount Price ($)</label>
+      <input type="number" id="discountPrice" class="w-full mb-4 p-2 border rounded bg-transparent text-white" placeholder="Or enter discount price" />
+
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Apply</button>
+      <button type="button" onclick="closeDiscountModal()" class="ml-2 px-4 py-2">Cancel</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Scripts -->
+<script>
+  function openUpdateModal(id) {
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    if (!row) return;
+
+    document.getElementById("updateProductId").value = id;
+    document.getElementById("updateProductName").value = row.querySelector(".product-name").innerText;
+    document.getElementById("updatePrice").value = row.querySelector(".price").innerText.replace("$", "");
+    document.getElementById("updateDescription").value = row.querySelector(".description")?.innerText || "";
+    document.getElementById("updateBrand").value = row.querySelector(".brand")?.innerText || "";
+
+    const stockText = row.querySelector(".stock").innerText;
+    const stockValue = stockText.match(/\d+/) ? stockText.match(/\d+/)[0] : 0;
+    document.getElementById("updateStock").value = stockValue;
+
+    const modal = document.getElementById("updateModal");
+    modal.classList.remove("hidden");
+    modal.onclick = function (e) {
+      if (e.target === modal) closeUpdateModal();
+    };
+  }
+
+  function closeUpdateModal() {
+    document.getElementById("updateModal").classList.add("hidden");
+  }
+
+  function openDiscountModal(id, discount = "") {
+    const modal = document.getElementById("discountModal");
+    document.getElementById("discountProductId").value = id;
+    document.getElementById("discountValue").value = discount;
+    modal.classList.remove("hidden");
+    modal.onclick = function (e) {
+      if (e.target === modal) closeDiscountModal();
+    };
+  }
+
+  function closeDiscountModal() {
+    document.getElementById("discountModal").classList.add("hidden");
+  }
+
+  // CSRF token
+  const csrfToken = "{{ csrf_token }}";
+
+  document.getElementById("updateForm").onsubmit = async function (e) {
+    e.preventDefault();
+    const id = document.getElementById("updateProductId").value;
+    const formData = new FormData(this);
+
+    const res = await fetch(`/product/update/${id}/`, {
+      method: "PUT",
+      headers: {
+        "X-CSRFToken": csrfToken,
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (res.ok) location.reload();
+    else alert(JSON.stringify(data));
+  };
+
+  function deleteProduct(id) {
+    if (confirm("Are you sure you want to delete this product?")) {
+      fetch(`/product/delete/${id}/`, {
+        method: "DELETE",
+        headers: {
+          "X-CSRFToken": csrfToken,
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+        .then((res) => res.json())
+        .then(() => location.reload());
+    }
+  }
+
+  function openDiscountModal(id, discount = "") {
+  const modal = document.getElementById("discountModal");
+  document.getElementById("discountProductId").value = id;
+  document.getElementById("discountPercent").value = "";
+  document.getElementById("discountPrice").value = discount || "";
+  modal.classList.remove("hidden");
+
+  modal.onclick = function (e) {
+    if (e.target === modal) closeDiscountModal();
+  };
+  }
+
+  document.getElementById("discountForm").onsubmit = async function (e) {
+  e.preventDefault();
+
+  const id = document.getElementById("discountProductId").value;
+  const percentInput = document.getElementById("discountPercent").value.trim();
+  const priceInput = document.getElementById("discountPrice").value.trim();
+
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  const originalPrice = parseFloat(row.querySelector(".price").innerText.replace("$", ""));
+
+  let discountAmount = null;
+
+  if (percentInput && priceInput) {
+    alert("Please fill only one: percentage OR price.");
+    return;
+  } else if (percentInput) {
+    const percent = parseFloat(percentInput);
+    if (isNaN(percent) || percent <= 0 || percent >= 100) {
+      alert("Enter a valid discount percentage between 1 and 99");
+      return;
+    }
+    discountAmount = Math.round(originalPrice * (percent / 100));
+  } else if (priceInput) {
+    const price = parseFloat(priceInput);
+    if (isNaN(price) || price <= 0 || price >= originalPrice) {
+      alert("Discount price must be greater than 0 and less than original price");
+      return;
+    }
+    discountAmount = price;
+  } else {
+    alert("Please enter a discount percentage or discount price.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("discount", discountAmount);
+
+  const res = await fetch(`/product/update/${id}/`, {
+    method: "PUT",
+    headers: {
+      "X-CSRFToken": csrfToken,
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+  if (res.ok) location.reload();
+  else alert(JSON.stringify(data));
+};
+</script>
+{% endblock %}

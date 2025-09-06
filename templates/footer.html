@@ -1,0 +1,100 @@
+<footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-6">
+                        <i class="fas fa-store text-primary text-2xl"></i>
+                        <span class="text-md font-bold">Big Bazar Islami Commerce</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">Your one-stop marketplace for all your needs. Quality products from trusted vendors.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Categories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Vendors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Deals & Offers</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Customer Service</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Shipping Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Returns & Refunds</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Track Your Order</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest updates and offers.</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="Your email address" class="px-4 py-2 w-full rounded-l-lg focus:outline-none text-dark">
+                            <button class="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="text-gray-400 text-sm">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2023 ShopEase. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-sm">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-sm">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button onclick="scrollToTop()" class="fixed bottom-6 right-6 bg-primary w-11 h-11 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition hidden" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <script>
+        // Back to top button functionality
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                document.getElementById("backToTop").style.display = "block";
+            } else {
+                document.getElementById("backToTop").style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>

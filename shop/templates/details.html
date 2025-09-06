@@ -1,0 +1,433 @@
+{% extends "base.html" %} {% block content %}
+
+<div
+  class="bg-dark-300 text-gray-200 min-h-screen flex items-center justify-center p-4"
+>
+  <div class="max-w-4xl w-full gradient-border p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Product Image Section -->
+      <div class="flex flex-col items-center">
+        <div class="relative mb-6 w-full">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-accent-blue/20 to-accent-purple/20 blur-xl rounded-full"
+          ></div>
+          <img
+            id="main-image"
+            src="{{ product.images.first.image.url }}"
+            alt="{{ product.product_name }}"
+            class="product-image w-full h-auto relative z-10 animate-float fade-in rounded-lg"
+          />
+        </div>
+
+        <div class="flex space-x-4">
+          {% for image in product.images.all %}
+          <div
+            class="thumbnail {% if forloop.first %}active border-2 border-accent-blue{% endif %} w-16 h-16 bg-dark-200 rounded-lg p-1 cursor-pointer"
+            data-image="{{ image.image.url }}"
+          >
+            <img
+              src="{{ image.image.url }}"
+              alt="{{ product.product_name }} - Image {{ forloop.counter }}"
+              class="w-full h-full object-cover rounded-md"
+            />
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Product Details Section -->
+      <div class="flex flex-col justify-center">
+        <div class="mb-4 flex items-center">
+          <span
+            class="bg-accent-blue/10 text-accent-blue text-xs font-semibold px-2.5 py-0.5 rounded"
+            >{{ product.category }}</span
+          >
+          <span class="mx-2 text-gray-400">•</span>
+          <span class="text-accent-green text-sm"
+            >In Stock <span id="stock-count">{{ product.stock }}</span></span
+          >
+        </div>
+
+        <h1 class="text-2xl font-bold mb-2">{{ product.product_name }}</h1>
+
+        <div class="flex items-center mb-4">
+          <div class="flex text-amber-400 mr-2">
+            <i class="fas fa-star text-sm"></i>
+            <i class="fas fa-star text-sm"></i>
+            <i class="fas fa-star text-sm"></i>
+            <i class="fas fa-star text-sm"></i>
+            <i class="fas fa-star-half-alt text-sm"></i>
+          </div>
+          <span class="text-xs text-gray-400">(4.7/5 • 128 reviews)</span>
+        </div>
+
+        <div class="mb-6">
+          {% if product.discounted_price %}
+          <span id="unit-price" class="hidden"
+            >{{ product.discounted_price }}</span
+          >
+          <span class="text-2xl font-bold text-accent-blue"
+            >${{ product.discounted_price }}</span
+          >
+          <span class="ml-2 text-sm text-gray-400 line-through"
+            >${{ product.price }}</span
+          >
+          {% else %}
+          <span id="unit-price" class="hidden">{{ product.price }}</span>
+          <span class="text-2xl font-bold text-accent-blue"
+            >${{ product.price }}</span
+          >
+          {% endif %}
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold mb-2 text-accent-purple">
+            DESCRIPTION
+          </h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            {{ product.description }}
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold mb-2 text-accent-purple">BRAND</h3>
+          <div class="flex items-center">
+            <div
+              class="w-8 h-8 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center mr-2"
+            >
+              <span class="font-bold text-dark-300 text-xs"
+                >{{ product.brand|first }}</span
+              >
+            </div>
+            <span class="text-sm font-medium">{{ product.brand }}</span>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold mb-2 text-accent-purple">
+            QUANTITY
+          </h3>
+          <div class="flex items-center">
+            <button
+              id="decrease-btn"
+              class="bg-dark-200 text-gray-200 w-8 h-8 rounded-l-lg flex items-center justify-center hover:bg-accent-blue/20 transition"
+            >
+              <i class="fas fa-minus text-xs"></i>
+            </button>
+            <input
+              type="text"
+              id="quantity-input"
+              value="1"
+              class="bg-black text-gray-200 w-10 h-8 flex items-center justify-center font-semibold text-sm text-center"
+              readonly
+            />
+            <button
+              id="increase-btn"
+              class="bg-dark-200 text-gray-200 w-8 h-8 rounded-r-lg flex items-center justify-center hover:bg-accent-blue/20 transition"
+            >
+              <i class="fas fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold mb-2 text-accent-purple">
+            TOTAL PRICE
+          </h3>
+          <div id="total-price" class="text-xl font-bold text-accent-blue">
+            {% if product.discounted_price %} ${{ product.discounted_price }} {%
+            else %} ${{ product.price }} {% endif %}
+          </div>
+        </div>
+
+        <div class="flex space-x-4">
+          <form method="GET" action="{% url 'order-form' %}">
+            <input
+              type="hidden"
+              name="product_name"
+              value="{{ product.product_name }}"
+            />
+            <input
+              type="hidden"
+              name="category"
+              value="{{ product.category }}"
+            />
+            <input type="hidden" id="form-quantity" name="quantity" value="1" />
+            <input
+              type="hidden"
+              id="form-price"
+              name="total_price"
+              value="{% if product.discounted_price %}{{ product.discounted_price }}{% else %}{{ product.price }}{% endif %}"
+            />
+            <input
+              type="hidden"
+              name="image_url"
+              value="{{ product.images.first.image.url }}"
+            />
+
+            <button
+              type="submit"
+              class="bg-gradient-to-r from-accent-blue to-accent-purple text-dark-300 font-semibold py-2.5 px-6 rounded-lg flex items-center justify-center flex-1 transition hover:opacity-90"
+            >
+              <i class="fas fa-bolt mr-2"></i>
+              Buy Now
+            </button>
+          </form>
+          <div class="flex space-x-4">
+            {% if product.stock > 0 %}
+            <button
+              id="add-to-cart-btn"
+              class="bg-gradient-to-r from-accent-blue to-accent-purple text-dark-300 font-semibold py-2.5 px-6 rounded-lg flex items-center justify-center flex-1 transition hover:opacity-90"
+              data-product-id="{{ product.id }}"
+            >
+              <i class="fas fa-shopping-cart mr-2"></i>
+              Add to Cart
+            </button>
+            {% else %}
+            <button
+              id="add-to-wishlist-btn"
+              class="border border-accent-blue text-accent-blue font-semibold py-2.5 px-6 rounded-lg flex items-center justify-center flex-1 transition hover:bg-accent-blue/10"
+              data-product-id="{{ product.id }}"
+            >
+              <i class="fas fa-heart mr-2"></i>
+              Add to Wishlist
+            </button>
+            {% endif %}
+          </div>
+
+          <div
+            id="success-modal"
+            class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+          >
+            <div
+              class="bg-green-700 rounded-lg p-6 w-full max-w-sm shadow-lg animate-fade-in text-center"
+            >
+              <h2 class="text-xl font-bold text-white mb-3">Success!</h2>
+              <p id="modal-message" class="text-white mb-6"></p>
+              <button
+                id="close-modal-btn"
+                class="bg-gradient-to-r from-accent-blue to-accent-purple text-dark-300 font-semibold py-2 px-6 rounded-lg transition hover:opacity-90"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-dark-200">
+          <div class="flex items-center text-xs text-gray-400 mb-2">
+            <i class="fas fa-truck mr-2 text-accent-blue"></i>
+            <span>Free shipping • Delivery in 2-4 days</span>
+          </div>
+          <div class="flex items-center text-xs text-gray-400">
+            <i class="fas fa-undo mr-2 text-accent-blue"></i>
+            <span>30-day money-back guarantee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .thumbnail {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .thumbnail:hover {
+      transform: scale(1.05);
+    }
+    .thumbnail.active {
+      box-shadow: 0 0 0 2px #7dcfff;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Image gallery functionality
+      const mainImage = document.getElementById("main-image");
+      const thumbnails = document.querySelectorAll(".thumbnail");
+      const formImageUrl = document.querySelector('input[name="image_url"]');
+
+      // Add click event to each thumbnail
+      thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", function () {
+          // Get the image URL from data attribute
+          const imageUrl = this.getAttribute("data-image");
+
+          // Update main image with fade effect
+          mainImage.classList.remove("fade-in");
+          void mainImage.offsetWidth; // Trigger reflow
+          mainImage.classList.add("fade-in");
+
+          // Change the main image source
+          mainImage.src = imageUrl;
+          mainImage.alt = this.querySelector("img").alt;
+
+          // Update the image URL in the form
+          formImageUrl.value = imageUrl;
+
+          // Update active thumbnail
+          thumbnails.forEach((t) =>
+            t.classList.remove("active", "border-2", "border-accent-blue")
+          );
+          this.classList.add("active", "border-2", "border-accent-blue");
+        });
+      });
+
+      // Get the unit price from the hidden span
+      const unitPrice = parseFloat(
+        document.getElementById("unit-price").textContent
+      );
+      const quantityInput = document.getElementById("quantity-input");
+      const totalPriceElem = document.getElementById("total-price");
+      const formQuantity = document.getElementById("form-quantity");
+      const formPrice = document.getElementById("form-price");
+      const stockCountElem = document.getElementById("stock-count");
+      const increaseBtn = document.getElementById("increase-btn");
+      const decreaseBtn = document.getElementById("decrease-btn");
+
+      // Parse the initial stock value
+      let stock = parseInt(stockCountElem.textContent);
+      let quantity = parseInt(quantityInput.value);
+
+      // Function to update the display
+      function updateDisplay() {
+        const total = (unitPrice * quantity).toFixed(2);
+        quantityInput.value = quantity;
+        formQuantity.value = quantity;
+        formPrice.value = total;
+        totalPriceElem.textContent = "$" + total;
+        stockCountElem.textContent = stock - quantity;
+
+        // Disable buttons based on stock availability
+        if (quantity >= stock) {
+          increaseBtn.disabled = true;
+          increaseBtn.classList.add("opacity-50", "cursor-not-allowed");
+        } else {
+          increaseBtn.disabled = false;
+          increaseBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        }
+
+        if (quantity <= 1) {
+          decreaseBtn.disabled = true;
+          decreaseBtn.classList.add("opacity-50", "cursor-not-allowed");
+        } else {
+          decreaseBtn.disabled = false;
+          decreaseBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        }
+      }
+
+      // Add event listeners to buttons
+      increaseBtn.addEventListener("click", () => {
+        if (quantity < stock) {
+          quantity++;
+          updateDisplay();
+        }
+      });
+
+      decreaseBtn.addEventListener("click", () => {
+        if (quantity > 1) {
+          quantity--;
+          updateDisplay();
+        }
+      });
+
+      // Initialize the display
+      updateDisplay();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const cartBtn = document.getElementById("add-to-cart-btn");
+      const wishlistBtn = document.getElementById("add-to-wishlist-btn");
+      const quantityInput = document.getElementById("quantity-input");
+      const modal = document.getElementById("success-modal");
+      const modalMessage = document.getElementById("modal-message");
+      const closeModalBtn = document.getElementById("close-modal-btn");
+
+      function showModal(message) {
+        modalMessage.textContent = message;
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+
+      function hideModal() {
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+      }
+
+      closeModalBtn.addEventListener("click", hideModal);
+
+      function getCSRFToken() {
+        const match = document.cookie.match(
+          new RegExp("(^| )csrftoken=([^;]+)")
+        );
+        return match ? match[2] : "";
+      }
+
+      // Add to Cart
+      if (cartBtn) {
+        cartBtn.addEventListener("click", async () => {
+          const productId = cartBtn.getAttribute("data-product-id");
+          const quantity = quantityInput ? parseInt(quantityInput.value) : 1;
+
+          const res = await fetch("/cart/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+              product: productId,
+              quantity: quantity,
+            }),
+          });
+
+          if (res.ok) {
+            showModal("Product added to cart successfully!");
+          } else {
+            showModal("Failed to add product to cart.");
+          }
+        });
+      }
+
+      // Add to Wishlist
+      if (wishlistBtn) {
+        wishlistBtn.addEventListener("click", async () => {
+          const productId = wishlistBtn.getAttribute("data-product-id");
+
+          const res = await fetch("/wishlist/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify({
+              product: productId,
+            }),
+          });
+
+          if (res.ok) {
+            showModal("Product added to wishlist successfully!");
+          } else {
+            showModal("Failed to add product to wishlist.");
+          }
+        });
+      }
+    });
+  </script>
+</div>
+
+{% endblock %}

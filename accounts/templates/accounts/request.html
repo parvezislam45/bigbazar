@@ -1,0 +1,299 @@
+{% block content %}
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6 text-white">All Vendor Requests</h1>
+
+  <div class="mb-4 text-gray-50">
+    Total Pending Requests:
+    <span class="font-semibold text-blue-600">{{ pending_vendor_count }}</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-slate-600 divide-y divide-gray-200">
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            ID
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Store Name
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Date
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Status
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-right text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Details
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-right text-sm font-semibold text-white uppercase tracking-wider"
+          >
+            Update Status
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-900 divide-y divide-gray-200">
+        {% for vendor in vendors %} {% if vendor.status == "pending" %}
+        <tr class="hover:bg-gray-800 transition-colors cursor-pointer">
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
+          >
+            #P-{{ vendor.id }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            {{ vendor.business_name }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            {{ vendor.created_at|date:"Y-m-d H:i" }}
+          </td>
+          {% if vendor.status == "pending" %}
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-600 text-white"
+            >
+              {{ vendor.status }}
+            </span>
+          </td>
+          {% endif %}
+          <td
+            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+          >
+            <button
+              onclick="openModal({{ vendor.id }})"
+              class="text-white bg-amber-600 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              <i class="fas fa-eye mr-1"></i> View
+            </button>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+          >
+            <button
+              onclick="openStatusModal({{ vendor.id }}, '{{ vendor.status }}')"
+              class="text-white bg-blue-600 px-3 py-1.5 rounded-lg transition-colors ml-2"
+            >
+              <i class="fas fa-edit mr-1"></i> Change Status
+            </button>
+          </td>
+        </tr>
+        {% endif %} {% empty %}
+        <tr>
+          <td colspan="7">No Request found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div id="modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div
+      class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+    >
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+      </div>
+
+      <span
+        class="hidden sm:inline-block sm:align-middle sm:h-screen"
+        aria-hidden="true"
+        >&#8203;</span
+      >
+
+      <div
+        id="modal-content"
+        class="inline-block align-bottom bg-transparent rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+      >
+        <div class="bg-gray-950 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+            >
+              <i class="fas fa-info-circle text-blue-600"></i>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <h3
+                id="modal-title"
+                class="text-lg leading-6 font-medium text-white"
+              >
+                Order Details
+              </h3>
+              <div class="mt-2">
+                <div id="modal-details" class="text-sm text-white">
+                  <!-- Details will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-transparent px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
+        >
+          <button
+            id="close-modal"
+            type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-6 py-1.5 bg-green-700 hover:bg-green-700 font-medium text-white sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div
+    id="statusModal"
+    class="fixed inset-0 z-50 hidden bg-gray-800 bg-opacity-50 flex items-center justify-center"
+  >
+    <div class="bg-gray-900 rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h2 class="text-xl font-semibold mb-4">Change Vendor Status</h2>
+
+      <input type="hidden" id="statusVendorId" />
+
+      <label
+        for="statusSelect"
+        class="block mb-2 text-sm font-medium text-gray-50"
+        >Status</label
+      >
+      <select
+        id="statusSelect"
+        class="w-full border border-gray-300 rounded p-2 mb-4 bg-gray-900"
+      >
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+      <div class="flex justify-end space-x-2">
+        <button
+          onclick="closeStatusModal()"
+          class="px-4 py-2 bg-gray-400 text-white rounded"
+        >
+          Cancel
+        </button>
+        <button
+          onclick="submitStatusChange()"
+          class="px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("mousedown", function () {
+      this.classList.add("scale-95");
+    });
+
+    button.addEventListener("mouseup", function () {
+      this.classList.remove("scale-95");
+    });
+
+    button.addEventListener("mouseleave", function () {
+      this.classList.remove("scale-95");
+    });
+  });
+</script>
+<script>
+  function openModal(vendorId) {
+    console.log("Clicked vendor:", vendorId);
+    // Show modal
+    document.getElementById("modal").classList.remove("hidden");
+
+    // Fetch order details via AJAX
+    fetch(`/request/${vendorId}/`)
+      .then((response) => response.json())
+      .then((data) => {
+        const details = `
+                <p><strong>ID:</strong> #P-${data.id}</p>
+                <p><strong>Name:</strong> ${data.business_name}</p>
+                <p><strong>Phone:</strong> ${data.phone_number}</p>
+                <p><strong>Address:</strong> ${data.address}, ${data.union}, ${data.sub_district}, ${data.district}, ${data.division}</p>
+                <p><strong>Reg: No:</strong> ${data.registration_number}</p>
+                <p><strong>Tin No:</strong> ${data.tax_id}</p>
+                <p><strong>Details:</strong> $${data.business_description}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+            `;
+        document.getElementById("modal-details").innerHTML = details;
+      });
+  }
+
+  // Close modal on "Close" button
+  document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("modal").classList.add("hidden");
+  });
+
+  // Close modal on click outside
+  window.addEventListener("click", (e) => {
+    const modal = document.getElementById("modal-content");
+    const container = document.getElementById("modal");
+    if (!modal.contains(e.target) && !e.target.closest("button")) {
+      container.classList.add("hidden");
+    }
+  });
+</script>
+<script>
+  function openStatusModal(vendorId, currentStatus) {
+    document.getElementById("statusVendorId").value = vendorId;
+    document.getElementById("statusSelect").value = currentStatus;
+    document.getElementById("statusModal").classList.remove("hidden");
+  }
+
+  function closeStatusModal() {
+    document.getElementById("statusModal").classList.add("hidden");
+  }
+
+  function submitStatusChange() {
+    const vendorId = document.getElementById("statusVendorId").value;
+    const newStatus = document.getElementById("statusSelect").value;
+
+    fetch(`/vendors/${vendorId}/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"), // For CSRF protection
+      },
+      body: JSON.stringify({ status: newStatus }),
+    }).then((response) => {
+      if (response.ok) {
+        closeStatusModal();
+        location.reload(); // Or use JS to update just the row
+      } else {
+        alert("Failed to update status.");
+      }
+    });
+  }
+
+  // Get CSRF token (Django requirement)
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+{% endblock %}

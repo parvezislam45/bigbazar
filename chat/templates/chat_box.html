@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto p-4 bg-black rounded shadow">
+    <h2 class="text-xl font-semibold text-white mb-4">Chat with {{ receiver.username }}</h2>
+
+    <!-- CHAT BOX -->
+    <div id="chat-box" class="border h-64 overflow-y-auto p-2 space-y-2 bg-black text-white rounded">
+        {% for msg in messages %}
+            <div class="{% if msg.sender == user %}text-right{% endif %}">
+                <p class="text-sm">
+                    <strong>{{ msg.sender.username }}</strong>: {{ msg.message }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- INPUT FORM (WebSocket Based) -->
+    <div class="mt-4 flex space-x-2">
+    <input type="text" id="message-input" class="flex-grow px-4 py-2 border rounded" placeholder="Type your message...">
+    <button id="send-button" class="px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+</div>
+</div>
+
+<script>
+    const userId = "{{ user.id }}";
+    const receiverId = "{{ receiver.id }}";
+    const chatBox = document.getElementById('chat-box');
+    const input = document.getElementById('message-input');
+    const button = document.getElementById('send-button');
+
+    const socket = new WebSocket(
+    'ws://' + window.location.host + '/ws/chat/{{ conversation.id }}/'
+    );
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const msgEl = document.createElement('div');
+        msgEl.innerHTML = `<strong>${data.sender}</strong>: ${data.message}`;
+        chatBox.appendChild(msgEl);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    button.onclick = function() {
+        const message = input.value.trim();
+        if (message) {
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+            input.value = '';
+        }
+    };
+</script>
+{% endblock %}
